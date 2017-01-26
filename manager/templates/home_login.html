@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load staticfiles %}
+<head>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+  <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'materialize/dist/js/materialize.min.js' %}"></script>
+
+</head>
+
+<body>
+  <div class="section"></div>
+  <main>
+    <center>
+      <div class="section"></div>
+      <h1>Stock Manager</h1>
+      <h5 class="indigo-text">Por favor, se autentique</h5>
+      <div class="section"></div>
+
+      <div class="container">
+        <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+
+          <form action="" class="col s12" method="post">
+            {% csrf_token %}
+            <div class='row'>
+              <div class='col s12'>
+              </div>
+            </div>
+
+            <div class='row'>
+              <div class='input-field col s12'>
+                <input class='validate' type="text" name='username' />
+                <label for='username'>Seu nome</label>
+              </div>
+            </div>
+
+            <div class='row'>
+              <div class='input-field col s12'>
+                <input class='validate' type='password' name='password'/>
+                <label for='password'>Sua senha</label>
+              </div>
+            </div>
+
+            <br />
+            <center>
+              <div class='row'>
+                <button type='submit' class='col s12 btn btn-large waves-effect indigo'><i class="material-icons right">send</i>Entrar</button>
+              </div>
+            </center>
+          </form>
+        </div>
+      </div>
+    </center>
+
+    <div class="section"></div>
+    <div class="section"></div>
+  </main>
+
+</body>
+
+</html>
