@@ -23,13 +23,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '29418=8h&nnz$pjb5@k@dnng0r6xfls5i%=b@l1k+p93#=ykvp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 ALLOWED_HOSTS = []
 =======
 ALLOWED_HOSTS = ['localhost', u'0.0.0.0']
 >>>>>>> First Commit
+=======
+ALLOWED_HOSTS = ['*']
+>>>>>>> v1.0
 
 AUTH_USER_MODEL = 'custom_user.customUser'
 
@@ -145,8 +149,8 @@ db_from_env = dj_database_url.config(conn_max_age=300)
 DATABASES['default'].update(db_from_env)
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
     os.path.join(PROJECT_ROOT, 'bower_components'),
