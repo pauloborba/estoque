@@ -14,7 +14,7 @@ def home_login(request):
     if request.method == "GET":
         if request.user.is_authenticated():
             return HttpResponseRedirect(reverse("home"))
-        return render(request, 'home_login.html')
+        return render(request, 'home_login.html', {'error': False})
     username = request.POST["username"]
     password = request.POST["password"]
     user = authenticate(username=username, password=password)
@@ -22,7 +22,8 @@ def home_login(request):
         if user.is_active:
             login(request, user)
             return HttpResponseRedirect(reverse('home'))
-    return HttpResponseRedirect(reverse('home_login'))
+    return render(request, 'home_login.html', {'error': True})
+
 
 @require_http_methods(["GET"])
 @login_required

@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  <title> New Item </title>
+  <title> Novo Item </title>
 {% endblock title %}
 
 {% block body %}
 <h1 class="center"> Novo Item </h1>
 <div class="row">
-<form class="col s12" action="" method="post">
+<form id="newItemForm" class="col s12" action="" method="post">
   {% csrf_token %}
     <div class="row">
       <div class="input-field col s6">
         <i class="material-icons prefix">description</i>
-        <input name="name" type="text" class="validate">
+        <input id="itemNameInput" name="name" type="text" class="validate">
         <label for="name">Nome do item</label>
       </div>
       <div class="input-field col s6">
@@ -26,7 +26,7 @@
     </div>
     <div class="row">
       <div class="right input-field col s6">
-        <input value="Criar item" type="submit" class="waves-effect waves-light btn">
+        <input id="newItemForm" onclick="validate_new_item();" value="Criar item" type="button" class="waves-effect waves-light btn">
       </div>
     </div>
   </form>
