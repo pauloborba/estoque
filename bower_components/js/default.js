@@ -5,9 +5,9 @@ $(document).ready(function() {
 });
 
 
-function openItemModal(name, id){
+function openItemModal(name, url){
   document.getElementById("itemName").innerHTML = "Atualizar " + name;
-  document.modalForm.action = '/editItem/'+id+'/';
+  document.modalForm.action = url;
 }
 
 function isValid(strInp){

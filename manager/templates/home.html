@@ -12,11 +12,11 @@
     <div class="collection col s6" style="padding-right: 0; padding-left: 0; width: 200%;">
     {% for item in items %}
       {% if item.qty == 0 %}
-        <a onclick="openItemModal('{{item.item_name}}', '{{item.id}}')" href="#editItemModal" class="black-text modal-trigger collection-item"><span class="badge green-text">{{item.qty|qtyMap}}</span>{{item.item_name}}</a>
+        <a onclick="openItemModal('{{item.item_name}}', '{% url 'editItemById' item.id %}')" href="#editItemModal" class="black-text modal-trigger collection-item"><span class="badge green-text">{{item.qty|qtyMap}}</span>{{item.item_name}}</a>
       {% elif item.qty == 1 %}
-        <a onclick="openItemModal('{{item.item_name}}', '{{item.id}}')" href="#editItemModal" class="black-text modal-trigger collection-item"><span class="badge yellow-text">{{item.qty|qtyMap}}</span>{{item.item_name}}</a>
+        <a onclick="openItemModal('{{item.item_name}}', '{% url 'editItemById' item.id %}')" href="#editItemModal" class="black-text modal-trigger collection-item"><span class="badge yellow-text">{{item.qty|qtyMap}}</span>{{item.item_name}}</a>
       {% else %}
-        <a onclick="openItemModal('{{item.item_name}}', '{{item.id}}')" href="#editItemModal" class="black-text modal-trigger collection-item"><span class="badge red-text">{{item.qty|qtyMap}}</span>{{item.item_name}}</a>
+        <a onclick="openItemModal('{{item.item_name}}', '{% url 'editItemById' item.id %}')" href="#editItemModal" class="black-text modal-trigger collection-item"><span class="badge red-text">{{item.qty|qtyMap}}</span>{{item.item_name}}</a>
       {% endif %}
     {% endfor %}
     </div>
