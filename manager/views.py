@@ -1,11 +1,12 @@
 from django.shortcuts import render
+from django.db import IntegrityError
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from custom_user.models import customUser
-from models import Item
+from models import Item, Category
 from reportlab.pdfgen import canvas
 import datetime
 
@@ -28,8 +29,8 @@ def home_login(request):
 @require_http_methods(["GET"])
 @login_required
 def home(request):
-    items = Item.objects.all()
-    return render(request, 'home.html', {'items': items})
+    cat = Category.objects.all()
+    return render(request, 'home.html', {'categories': cat})
 
 @require_http_methods(["GET", "POST"])
 def sign_up(request):
@@ -44,26 +45,40 @@ def sign_up(request):
 @require_http_methods(["GET", "POST"])
 @login_required
 def new_item(request):
+    categories = Category.objects.all()
     if request.method=='GET':
-        return render(request, 'new_item.html')
-    item_name = request.POST["name"]
-    qty = request.POST["qty"]
-    Item.objects.create(item_name=item_name, qty=int(qty))
+        return render(request, 'new_item.html', {'name_taken': False, 'categories': categories})
+    item_name = request.POST["name"].capitalize()
+    enough = request.POST["enough"]
+    enough = True if enough=="1" else False
+    try:
+        newItem = Item.objects.create(item_name=item_name, enough=enough)
+        Category.objects.get(id=int(request.POST["category"])).itens.add(newItem)
+    except IntegrityError:
+        return render(request, 'new_item.html', {'name_taken': True, 'categories': categories})
     return HttpResponseRedirect(reverse("home"))
 
-@require_http_methods(["GET", "POST"])
+@require_http_methods(["GET"])
 @login_required
 def edit_item(request, item_id):
     item_to_edit = Item.objects.get(id=item_id)
-    if request.method=="GET":
-        return render(request, 'edit_item.html', {'item': item_to_edit})
-    updateVal = int(request.POST["qty"])
-    if updateVal != item_to_edit.qty:
-        request.user.points += 1
-        request.user.save()
-        item_to_edit.qty = updateVal
-        item_to_edit.save()
+    request.user.points += 1
+    request.user.save()
+    item_to_edit.enough = not item_to_edit.enough
+    item_to_edit.save()
     return HttpResponseRedirect(reverse('home'))
+
+@require_http_methods(["GET", "POST"])
+@login_required
+def new_category(request):
+    if request.method=='GET':
+        return render(request, 'new_category.html', {'name_taken': False})
+    category_name = request.POST["name"].capitalize()
+    try:
+        Category.objects.create(category_name=category_name)
+    except IntegrityError:
+        return render(request, 'new_category.html', {'name_taken': True})
+    return HttpResponseRedirect(reverse("home"))
 
 @login_required
 def logout_view(request):
@@ -85,14 +100,10 @@ def generate_pdf(request):
 
     # Draw things on the PDF. Here's where the PDF generation happens.
     # See the ReportLab documentation for the full list of functionality.
-    items = Item.objects.filter(qty__in=[1,2])
+    items = Item.objects.filter(enough = False)
     i = 0
     for item in items:
-        p.drawString(10, (800-(30*i)), item.item_name+':')
-        if item.qty == 1:
-            p.drawString(140, (800-(30*i)), "Pouco")
-        else:
-            p.drawString(140, (800-(30*i)), "Acabou")
+        p.drawString(10, (800-(30*i)), item.item_name)
         i += 1
 
     # Close the PDF object cleanly, and we're done.

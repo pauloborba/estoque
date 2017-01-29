@@ -25,8 +25,19 @@ function validate_login(){
 
 function validate_new_item(){
   item_name = document.getElementById("itemNameInput").value;
-  if(isValid(item_name))
+  category = document.getElementById("categoryInput").value;
+  if(isValid(item_name) && isValid(category))
     document.getElementById("newItemForm").submit();
+  else if(isValid(item_name))
+    Materialize.toast('Escolha uma categoria!', 4000);
+  else
+    Materialize.toast('Nome é obrigatório!', 4000);
+}
+
+function validate_new_category(){
+  category_name = document.getElementById("categoryNameInput").value;
+  if(isValid(category_name))
+    document.getElementById("newCategoryForm").submit();
   else
     Materialize.toast('Nome é obrigatório!', 4000);
 }

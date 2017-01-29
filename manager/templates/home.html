@@ -8,42 +8,21 @@
   {% include 'menu.html' %}
   <h1 class="indigo-text" style="margin-left: 39%"> Você tem {{request.user.points}} pontos </h1>
   <div class="row">
-    <h5 class="right" style="color: rgba(0, 0, 0, 0.54);">Items</h5>
-    <div class="collection col s6" style="padding-right: 0; padding-left: 0; width: 200%;">
-    {% for item in items %}
-      {% if item.qty == 0 %}
-        <a onclick="openItemModal('{{item.item_name}}', '{% url 'editItemById' item.id %}')" href="#editItemModal" class="black-text modal-trigger collection-item"><span class="badge green-text">{{item.qty|qtyMap}}</span>{{item.item_name}}</a>
-      {% elif item.qty == 1 %}
-        <a onclick="openItemModal('{{item.item_name}}', '{% url 'editItemById' item.id %}')" href="#editItemModal" class="black-text modal-trigger collection-item"><span class="badge yellow-text">{{item.qty|qtyMap}}</span>{{item.item_name}}</a>
-      {% else %}
-        <a onclick="openItemModal('{{item.item_name}}', '{% url 'editItemById' item.id %}')" href="#editItemModal" class="black-text modal-trigger collection-item"><span class="badge red-text">{{item.qty|qtyMap}}</span>{{item.item_name}}</a>
-      {% endif %}
-    {% endfor %}
-    </div>
-  </div>
-
-  <div style="height: 45%" id="editItemModal" class="modal">
-    <div class="modal-content">
-      <h4 class="center" id="itemName"></h4>
-      <div style="margin-top: 5%;" class="row">
-        <form name="modalForm" id="modalForm" class="col s12" method="post">
-          {% csrf_token %}
-            <div class="row" style="margin-left: 22%">
-              <div class="input-field col s5">
-                <select name="qty">
-                  <option value="0">Suficiente</option>
-                  <option value="1">Pouco</option>
-                  <option value="2">Acabou</option>
-                </select>
-                <label>Quantidade</label>
-              </div>
-              <div class="input-field col s6">
-                <input value="Atualizar" type="submit" class="waves-effect waves-light btn">
-              </div>
-            </div>
-        </form>
+    {% for category in categories %}
+    {% if category.itens.all %}
+      <h4 class="center" style="margin-left: 60%; color: rgba(0, 0, 0, 0.54);"> {{category.category_name}} </h4>
+      <div class="collection col s6" style="padding-right: 0; padding-left: 0; width: 200%;">
+        {% for item in category.itens.all %}
+          {% if item.enough %}
+            <a href="{% url 'editItemById' item.id %}" class="black-text collection-item"><span class="green-text badge">{{item.enough|qtyMap}}</span>{{item.item_name}}</a>
+          {% else %}
+            <a href="{% url 'editItemById' item.id %}" class="black-text collection-item"><span class="red-text badge">{{item.enough|qtyMap}}</span>{{item.item_name}}</a>
+          {% endif %}
+        {% endfor %}
       </div>
-    </div>
+    {% endif %}
+
+    {% endfor %}
   </div>
 
 

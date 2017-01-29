@@ -19,11 +19,12 @@ from manager import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls, name="admPage"),
     url(r'^$', views.home_login, name="home_login"),
     url(r'^signUp/$', views.sign_up, name="sign_up"),
     url(r'^newItem/$', views.new_item, name="new_item"),
     url(r'^editItem/([0-9]+)/$', views.edit_item, name="editItemById"),
+    url(r'^newCategory/$', views.new_category, name="new_category"),
     url(r'^home/$', views.home, name="home"),
     url(r'^genPdf/$', views.generate_pdf, name="pdfGen"),
     url(r'^logout/$', views.logout_view, name="logout"),
