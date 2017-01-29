@@ -13,11 +13,11 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(
-            model_name='item',
+            model_name='Item',
             name='qty',
         ),
         migrations.AddField(
-            model_name='item',
+            model_name='Item',
             name='enough',
             field=models.BooleanField(default=True),
             preserve_default=False,
