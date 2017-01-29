@@ -96,14 +96,23 @@ def generate_pdf(request):
 
     # Create the PDF object, using the response object as its "file."
     p = canvas.Canvas(response)
-    p.setFont("Helvetica", 15)
 
     # Draw things on the PDF. Here's where the PDF generation happens.
     # See the ReportLab documentation for the full list of functionality.
-    items = Item.objects.filter(enough = False)
+    categories = Category.objects.all()
+
     i = 0
-    for item in items:
-        p.drawString(10, (800-(30*i)), item.item_name)
+    for cat in categories:
+        items = cat.itens.filter(enough=False)
+        if not items:
+            continue
+        p.setFont("Helvetica", 25)
+        p.drawString(250, (800-(30*i)), cat.category_name)
+        i += 1
+        for item in items:
+            p.setFont("Helvetica", 15)
+            p.drawString(200, (800-(30*i)), item.item_name)
+            i += 1
         i += 1
 
     # Close the PDF object cleanly, and we're done.
