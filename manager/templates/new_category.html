@@ -12,7 +12,7 @@
     <div class="row">
       <div class="input-field col s10">
         <i class="material-icons prefix">description</i>
-        <input id="categoryNameInput" name="name" type="text" class="validate">
+        <input oninput="setCustomValidity('')" required oninvalid="this.setCustomValidity('Campo obrigatório')" id="categoryNameInput" name="name" type="text" class="validate">
         <label for="name">Nome da categoria</label>
       </div>
     </div>
@@ -27,7 +27,7 @@
 
     <div class="row">
       <div class="right input-field col s5">
-        <button id="newCategoryForm" onclick="validate_new_category();" type="button" class="waves-effect waves-light btn">
+        <button id="newCategoryForm" type="submit" class="waves-effect waves-light btn">
         <i class="material-icons right">add</i>Criar categoria</button>
       </div>
       <div class="left input-field col s7">
