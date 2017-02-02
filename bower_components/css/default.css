@@ -2,6 +2,13 @@
     color: white;
 }
 
+@media only screen and (max-width: 1000px)
+{
+  #slide-out{
+      display: none;
+  }
+}
+
 .rotate180{
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
