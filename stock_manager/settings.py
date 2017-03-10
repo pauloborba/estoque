@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '29418=8h&nnz$pjb5@k@dnng0r6xfls5i%=b@l1k+p93#=ykvp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -93,9 +93,9 @@ DATABASES = {
 =======
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'stock_manager',
-        'USER': 'stock_manager_lcgm',
+        'USER': 'lcgm',
         'PASSWORD': '123l321l',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '',
 >>>>>>> First Commit
     }

@@ -20,14 +20,20 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls, name="admPage"),
-    url(r'^$', views.home_login, name="home_login"),
-    url(r'^signUp/$', views.sign_up, name="sign_up"),
-    url(r'^newItem/$', views.new_item, name="new_item"),
-    url(r'^editItem/([0-9]+)/$', views.edit_item, name="editItemById"),
-    url(r'^newCategory/$', views.new_category, name="new_category"),
-    url(r'^home/$', views.home, name="home"),
+    url(r'^$', views.new_login, name="new_login"),
+    url(r'^home/$', views.new_home, name="new_home"),
+    url(r'^old$', views.home_login, name="home_login"),
+    url(r'^signUp_old/$', views.sign_up, name="sign_up"),
+    url(r'^newItem/$', views.new_item_new, name="new_item_new"),
+    url(r'^newItem_old/$', views.new_item, name="new_item"),
+    url(r'^editItem/$', views.edit_item_new, name="new_editItemById"),
+    url(r'^editItem_old/([0-9]+)/$', views.edit_item, name="editItemById"),
+    url(r'^newCategory/$', views.new_category_new, name="new_category_new"),
+    url(r'^newCategory_old/$', views.new_category, name="new_category"),
+    url(r'^home_old/$', views.home, name="home"),
     url(r'^genPdf/$', views.generate_pdf, name="pdfGen"),
-    url(r'^logout/$', views.logout_view, name="logout"),
+    url(r'^logout_old/$', views.logout_view, name="logout"),
+    url(r'^logout/$', views.new_logout, name="new_logout"),
 
 ]
 urlpatterns += staticfiles_urlpatterns()

@@ -1,0 +1,31 @@
+{% extends 'new_base.html' %}
+
+{% block title %}
+  <title>TSM - Home </title>
+{% endblock title %}
+
+{% block body %}
+    <header class="col-xs-6 col-xs-offset-6">
+      <h1 id="userPoints"> You've got {{user.points}} points. </h1>
+    </header>
+
+    {% for category in categories %}
+      {% if category.item_set.all %}
+        <section class="col-xs-6 col-md-4 col-xs-offset-7">
+          <h2 class="text-muted"> {{category.category_name}} </h2>
+        </section>
+        <section class="col-xs-6 col-md-4 col-xs-offset-6">
+          <div class="list-group">
+            {% for item in category.item_set.all %}
+              {% if item.enough %}
+                <a class="list-group-item" onclick="editItem({{ item.id }})"> {{item.item_name}} <span id="item{{ item.id }}" style="min-width: 55px; width: 55px;" class="label label-success pull-right">Enough</span></a>
+              {% else %}
+                <a class="list-group-item" onclick="editItem({{ item.id }})"> {{item.item_name}} <span id="item{{ item.id }}" style="min-width: 55px; width: 55px;" class="label label-danger pull-right">Ended up</span></a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </section>
+      {% endif %}
+    {% endfor %}
+
+{% endblock body %}

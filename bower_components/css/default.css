@@ -1,11 +1,36 @@
 .whiteText{
     color: white;
 }
+html, body, .fill{
+  min-height: 100%;
+  height: 100%;
+}
 
-@media only screen and (max-width: 1000px)
+a:hover {
+ cursor:pointer;
+}
+
+body{
+  padding-top: 60px;
+}
+
+.marginTop{
+  margin-top: 10px;
+}
+
+.divider {
+  height: 1px;
+  width:100%;
+  display:block; /* for use on default inline elements like span */
+  margin: 9px 0;
+  overflow: hidden;
+  background-color: #e5e5e5;
+}
+
+@media only screen and (min-width: 1000px)
 {
-  #slide-out{
-      display: none;
+  .bodyContent{
+      padding-left: 300px;
   }
 }
 

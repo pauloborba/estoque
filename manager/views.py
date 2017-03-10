@@ -10,6 +10,30 @@ from models import Item, Category
 from reportlab.pdfgen import canvas
 import datetime
 
+
+
+@require_http_methods(["GET","POST"])
+def new_login(request):
+    if request.method=="GET":
+        if request.user.is_authenticated():
+            return HttpResponseRedirect(reverse("new_home"))
+        return render(request, 'new_login.html', {'error': False})
+    username = request.POST["username"]
+    password = request.POST["password"]
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            return HttpResponseRedirect(reverse('new_home'))
+    return render(request, 'new_login.html', {'error': True})
+
+@require_http_methods(["GET", "POST"])
+@login_required
+def new_home(request):
+    cats = Category.objects.all()
+    return render(request, 'new_home.html', {'item_name_taken': False, 'category_name_taken': False,\
+    'categories': cats})
+
 @require_http_methods(["GET","POST"])
 def home_login(request):
     if request.method == "GET":
@@ -24,7 +48,6 @@ def home_login(request):
             login(request, user)
             return HttpResponseRedirect(reverse('home'))
     return render(request, 'home_login.html', {'error': True})
-
 
 @require_http_methods(["GET"])
 @login_required
@@ -51,12 +74,40 @@ def new_item(request):
     item_name = request.POST["name"].capitalize()
     enough = request.POST["enough"]
     enough = True if enough=="1" else False
+    category = request.POST["category"]
+    category = Category.objects.get(id=int(category))
     try:
-        newItem = Item.objects.create(item_name=item_name, enough=enough)
-        Category.objects.get(id=int(request.POST["category"])).itens.add(newItem)
+        newItem = Item.objects.create(item_name=item_name, enough=enough, category=category)
     except IntegrityError:
         return render(request, 'new_item.html', {'name_taken': True, 'categories': categories})
     return HttpResponseRedirect(reverse("home"))
+
+@require_http_methods(["POST"])
+@login_required
+def new_item_new(request):
+    categories = Category.objects.all()
+    item_name = request.POST["name"].capitalize()
+    enough = request.POST["enough"]
+    enough = True if enough=="1" else False
+    category = request.POST["category"]
+    category = Category.objects.get(id=int(category))
+    try:
+        newItem = Item.objects.create(item_name=item_name, enough=enough, category=category)
+    except IntegrityError:
+        return render(request, 'new_home.html', {'item_name_taken': True, 'iname': item_name ,'categories': categories})
+    return HttpResponseRedirect(reverse("new_home"))
+
+@require_http_methods(["POST"])
+@login_required
+def edit_item_new(request):
+    item_id = request.POST["id"];
+    item_to_edit = Item.objects.get(id=item_id)
+    request.user.points += 1
+    request.user.save()
+    item_to_edit.enough = not item_to_edit.enough
+    item_to_edit.save()
+    return HttpResponse(request.user.points);
+
 
 @require_http_methods(["GET"])
 @login_required
@@ -80,10 +131,28 @@ def new_category(request):
         return render(request, 'new_category.html', {'name_taken': True})
     return HttpResponseRedirect(reverse("home"))
 
+
+
+@require_http_methods(["POST"])
+@login_required
+def new_category_new(request):
+    cats = Category.objects.all()
+    category_name = request.POST["name"].capitalize()
+    try:
+        Category.objects.create(category_name=category_name)
+    except IntegrityError:
+        return render(request, 'new_home.html', {'category_name_taken': True, 'cname': category_name, 'categories': cats})
+    return HttpResponseRedirect(reverse("new_home"))
+
 @login_required
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("home_login"))
+
+@login_required
+def new_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("new_login"))
 
 @login_required
 def generate_pdf(request):
@@ -103,7 +172,7 @@ def generate_pdf(request):
 
     i = 0
     for cat in categories:
-        items = cat.itens.filter(enough=False)
+        items = cat.item_set.filter(enough=False)
         if not items:
             continue
         p.setFont("Helvetica", 25)
