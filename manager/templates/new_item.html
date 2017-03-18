@@ -6,16 +6,16 @@
 
 {% block body %}
 <h1 class="center"> Novo Item </h1>
-<div class="row">
-<form id="newItemForm" class="col s12" action="" method="post">
+<form id="newItemForm" action="" method="post">
   {% csrf_token %}
     <div class="row">
-      <div class="input-field col s6">
+      <div class="input-field col s12 m6">
         <i class="material-icons prefix">description</i>
         <input id="itemNameInput" name="name" type="text" class="validate">
         <label for="name">Nome do item</label>
       </div>
-      <div class="input-field col s6">
+      <div class="input-field col s12 m6">
+        <i class="large material-icons prefix">equalizer</i>
         <select name="enough">
           <option value="1">Suficiente</option>
           <option value="0">Comprar</option>
@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="row">
-        <div class="input-field col s6">
+        <div class="input-field col s12 m6">
           <i class="large material-icons prefix">toc</i>
           <select id="categoryInput" name="category">
             {% for category in categories %}
@@ -51,5 +51,4 @@
       </div>
     </div>
   </form>
-</div>
 {% endblock body %}

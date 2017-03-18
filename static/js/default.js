@@ -1,49 +1,36 @@
-function editItem(item_id){
-  var csrftoken = Cookies.get('csrftoken');
+$(document).ready(function() {
+  $('select').material_select();
+});
 
-  var promise = new Promise(function(resolve, reject){
-    $.ajax({
-      type: "POST",
-      url: "/editItem/",
-      data: {id: item_id, csrfmiddlewaretoken: csrftoken},
-      success: function(data){
-        resolve(data);
-      },
-      error: function(jqXHR, err){
-        reject("fudeu");
-      }
-    });
-
-  });
-  var item = $('#item'+item_id);
-  if(item.hasClass("label-success")){
-    item.removeClass("label-success");
-    item.addClass("label-danger");
-    item.html("Ended up");
+function change_status(reference){
+  if(reference.hasClass("green-text")){
+    reference.removeClass("green-text");
+    reference.addClass("red-text");
+    reference.html("Comprar");
   }
   else {
-    item.removeClass("label-danger");
-    item.addClass("label-success");
-    item.html("Enough");
+    reference.removeClass("red-text");
+    reference.addClass("green-text");
+    reference.html("Suficiente");
   }
+}
 
-
-  promise.then(function(result){
-    $('#userPoints').html("You've got "+result+" points.");
-    $('#userPointsNav').html(result);
-  }, function(error){
-    alert("Some error ocurred. Sorry!");
-    if(item.hasClass("label-success")){
-      item.removeClass("label-success");
-      item.addClass("label-danger");
-      item.html("Ended up");
-    }
-    else {
-      item.removeClass("label-danger");
-      item.addClass("label-success");
-      item.html("Enough");
+function editItem(item_id){
+  var csrftoken = Cookies.get('csrftoken');
+  $.ajax({
+    type: "POST",
+    url: "/editItem/",
+    data: {id: item_id, csrfmiddlewaretoken: csrftoken},
+    success: function(data){
+      $('#userPoints').html(data);
+      $('#userWelcome').html(' Você tem ' + data + ' pontos ')
+    },
+    error: function(jqXHR, err){
+      change_status($('#item'+item_id));
     }
   });
+
+  change_status($('#item'+item_id));
 
 }
 
