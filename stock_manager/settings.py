@@ -23,17 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '29418=8h&nnz$pjb5@k@dnng0r6xfls5i%=b@l1k+p93#=ykvp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-ALLOWED_HOSTS = []
-=======
-ALLOWED_HOSTS = ['localhost', u'0.0.0.0']
->>>>>>> First Commit
-=======
 ALLOWED_HOSTS = ['*']
->>>>>>> v1.0
 
 AUTH_USER_MODEL = 'custom_user.customUser'
 
@@ -87,17 +79,8 @@ WSGI_APPLICATION = 'stock_manager.wsgi.application'
 
 DATABASES = {
     'default': {
-<<<<<<< HEAD
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-=======
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'stock_manager',
-        'USER': 'lcgm',
-        'PASSWORD': '123l321l',
-        'HOST': '127.0.0.1',
-        'PORT': '',
->>>>>>> First Commit
     }
 }
 
@@ -135,25 +118,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.10/howto/static-files/
-<<<<<<< HEAD
 STATIC_URL = '/bower_components/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "bower_components/")]
-=======
-STATIC_ROOT = '/bower_components/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "bower_components/")]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "bower_components/"),
+os.path.join(BASE_DIR, "static/")]
 
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=300)
-DATABASES['default'].update(db_from_env)
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'bower_components'),
-)
-
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
->>>>>>> First Commit

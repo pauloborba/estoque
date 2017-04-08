@@ -6,7 +6,7 @@ html, body, .fill{
   height: 100%;
 }
 
-a:hover {
+a:hover, b{
  cursor:pointer;
 }
 

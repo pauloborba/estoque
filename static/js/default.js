@@ -1,6 +1,18 @@
 $(document).ready(function() {
-  $('select').material_select();
+    Materialize.updateTextFields();
+    $('select').material_select();
+    $('.modal').modal();
 });
+
+
+function openItemModal(name, url){
+  document.getElementById("itemName").innerHTML = "Atualizar " + name;
+  document.modalForm.action = url;
+}
+
+function isValid(strInp){
+  return (strInp && strInp.length !== 0);
+}
 
 function change_status(reference){
   if(reference.hasClass("green-text")){
@@ -23,7 +35,7 @@ function editItem(item_id){
     data: {id: item_id, csrfmiddlewaretoken: csrftoken},
     success: function(data){
       $('#userPoints').html(data);
-      $('#userWelcome').html(' Você tem ' + data + ' pontos ')
+      $('#userWelcome').html(' Você tem ' + data + ' pontos ');
     },
     error: function(jqXHR, err){
       change_status($('#item'+item_id));
@@ -32,19 +44,6 @@ function editItem(item_id){
 
   change_status($('#item'+item_id));
 
-}
-
-function openItemModal(name, url){
-  document.getElementById("itemName").innerHTML = "Atualizar " + name;
-  document.modalForm.action = url;
-}
-
-function hideSideNav(){
-  $("#test").addClass("hidden");
-}
-
-function isValid(strInp){
-  return (strInp && strInp.length !== 0);
 }
 
 function validate_new_item(){
