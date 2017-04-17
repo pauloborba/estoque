@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor',
     'custom_user',
     'manager',
 ]
@@ -117,8 +118,26 @@ USE_L10N = True
 
 USE_TZ = True
 
+COMPRESS_ENABLED = True
 
-STATIC_URL = '/bower_components/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "bower_components/"),
-os.path.join(BASE_DIR, "static/")]
+COMPRESS_ROOT = os.path.join(BASE_DIR, "static/")
+
+COMPRESS_URL = '/static/'
+
+COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter',  'compressor.filters.cssmin.CSSMinFilter']
+
+
+STATICFILES_FINDERS = ['django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',]
+
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "bower_components/")]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+STATIC_URL = '/static/'
+
+
+
 

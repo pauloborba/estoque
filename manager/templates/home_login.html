@@ -2,14 +2,19 @@
 <html lang="en">
 {% load static %}
 {% load staticfiles %}
+{% load compress %}
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/gif" href="{% static 'favicon.ico'%}" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+  {% compress css %}
+  <link type="text/css" rel="stylesheet" href="{% static "materialize/dist/css/materialize.min.css" %}">
+  {% endcompress %}
+  {% compress js %}
   <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
   <script src="{% static 'materialize/dist/js/materialize.min.js' %}"></script>
   <script src="{% static 'js/default.js' %}"></script>
+  {% endcompress %}
   <title> Stock Manager </title>
 
 </head>
@@ -36,14 +41,14 @@
             <div class='row'>
               <div class='input-field col s12'>
                 <input oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Campo obrigatório')" required class='validate' type="text" name='username' id="usernameInput" />
-                <label for='username'>Seu nome</label>
+                <label for='username' style="text-align: left;">Seu nome</label>
               </div>
             </div>
 
             <div class='row'>
               <div class='input-field col s12'>
                 <input oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Campo obrigatório')" required class='validate' type='password' name='password' id="pwdInput"/>
-                <label for='password'>Sua senha</label>
+                <label for='password' style="text-align:left;">Sua senha</label>
               </div>
             </div>
             {% if error %}

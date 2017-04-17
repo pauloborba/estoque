@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 {% load static %}
 {% load staticfiles %}
+{% load compress %}
 <html lang="pt-br">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/gif" href="{% static 'favicon.ico'%}" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {% compress css %}
     <link type="text/css" rel="stylesheet" href="{% static "css/default.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% static "materialize/dist/css/materialize.min.css" %}">
+    {% endcompress %}
+    {% compress js %}
     <script src="{% static "jquery/dist/jquery.min.js" %}"></script>
     <script src="{% static "materialize/dist/js/materialize.min.js" %}"></script>
     <script src="{% static "js-cookie/src/js.cookie.js" %}"></script>
     <script src="{% static "js/default.js" %}"></script>
-    <link type="text/css" rel="stylesheet" href="{% static "materialize/dist/css/materialize.min.css" %}">
+    {% endcompress %}
+
     <meta charset="utf-8">
     {% block title %}
     {% endblock %}
