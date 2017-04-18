@@ -29,6 +29,7 @@ var/
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+static/CACHE
 
 # Installer logs
 pip-log.txt
@@ -52,6 +53,13 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
+
+# excluding dependencies
+bower_components/**
+bower_components/
+
+#excluding DB instance
+db.sqlite3
 
 # Flask stuff:
 instance/

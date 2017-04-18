@@ -1,0 +1,14 @@
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large red">
+    <i class="large material-icons">menu</i>
+  </a>
+  <ul>
+    <li><a href="{% url 'new_item' %}" class="btn-floating blue"><i class="material-icons">add</i></a></li>
+    <li><a href="{% url 'new_category' %}" class="btn-floating blue"><i class="material-icons">playlist_add</i></a></li>
+    <li><a href="{% url 'pdfGen' %}" class="btn-floating yellow darken-1"><i class="rotate180 material-icons">publish</i></a></li>
+    {% if request.user.is_superuser %}
+      <li><a href="{% url 'sign_up' %}"class="btn-floating red darken-3"><i class="material-icons">person_pin</i></a></li>
+      <li><a href="/admin/"class="btn-floating red darken-3"><i class="material-icons">supervisor_account</i></a></li>
+    {% endif %}
+    <li><a href="{% url 'logout' %}"class="btn-floating black"><i class="material-icons">power_settings_new</i></a></li>
+</div>

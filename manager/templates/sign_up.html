@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title> Cadastrar </title>
+{% endblock title %}
+
+{% block body %}
+  <h1 class="center"> Cadastrar </h1>
+  <div class="row">
+  <form class="col s12" action="" method="post">
+    {% csrf_token %}
+      <div class="row">
+        <div class="input-field col s6">
+          <i class="material-icons prefix">account_circle</i>
+          <input name="username" type="text" class="validate">
+          <label for="username">Login</label>
+        </div>
+        <div class="input-field col s6">
+          <i class="material-icons prefix">mail</i>
+          <input name="email" type="text" class="validate">
+          <label for="email">E-mail</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <i class="material-icons prefix">lock_outline</i>
+          <input name="password" type="password" class="validate">
+          <label for="password">Senha</label>
+        </div>
+        <div class="input-field col s6">
+          <input value="Cadastrar" type="submit" class="waves-effect waves-light btn">
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock body %}

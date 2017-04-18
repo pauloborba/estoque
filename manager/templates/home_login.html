@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load staticfiles %}
+{% load compress %}
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/gif" href="{% static 'favicon.ico'%}" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  {% compress css %}
+  <link type="text/css" rel="stylesheet" href="{% static "materialize/dist/css/materialize.min.css" %}">
+  {% endcompress %}
+  {% compress js %}
+  <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'materialize/dist/js/materialize.min.js' %}"></script>
+  <script src="{% static 'js/default.js' %}"></script>
+  {% endcompress %}
+  <title> Stock Manager </title>
+
+</head>
+
+<body>
+  <div class="section"></div>
+  <main>
+    <center>
+      <div class="section"></div>
+      <h1>Stock Manager</h1>
+      <h5 class="indigo-text">Por favor, se autentique</h5>
+      <div class="section"></div>
+
+      <div class="container">
+        <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+
+          <form action="" class="col s12" method="post" id="loginForm">
+            {% csrf_token %}
+            <div class='row'>
+              <div class='col s12'>
+              </div>
+            </div>
+
+            <div class='row'>
+              <div class='input-field col s12'>
+                <input oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Campo obrigatório')" required class='validate' type="text" name='username' id="usernameInput" />
+                <label for='username' style="text-align: left;">Seu nome</label>
+              </div>
+            </div>
+
+            <div class='row'>
+              <div class='input-field col s12'>
+                <input oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Campo obrigatório')" required class='validate' type='password' name='password' id="pwdInput"/>
+                <label for='password' style="text-align:left;">Sua senha</label>
+              </div>
+            </div>
+            {% if error %}
+              <p class="red-text subheader"> Nome e/ou senha incorreto(s).</p>
+            {% endif %}
+
+            <br />
+            <center>
+              <div class='row'>
+                <button type="submit" class='col s12 btn btn-large waves-effect indigo'><i class="material-icons right">send</i>Entrar</button>
+              </div>
+            </center>
+          </form>
+        </div>
+      </div>
+    </center>
+
+    <div class="section"></div>
+    <div class="section"></div>
+  </main>
+
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load qtyMap %}
+{% block title %}
+  <title> Home </title>
+{% endblock title %}
+
+{% block body %}
+  {% include 'menu.html' %}
+  <header class="row">
+    <div class="col s12 center">
+      <h1 class="indigo-text" id="userWelcome"> Você tem {{request.user.points}} pontos </h1>
+    </div>
+  </header>
+    {% for category in categories %}
+    {% if category.item_set.all %}
+    <section class="row">
+      <header class="center">
+        <h4 style="color: rgba(0, 0, 0, 0.6);"> {{category.category_name}} </h4>
+      </header>
+        <div class="collection col s12">
+          {% for item in category.item_set.all %}
+            {% if item.enough %}
+              <a onclick="editItem({{item.id}});" class="black-text collection-item"><span class="green-text badge" id="item{{item.id}}">Suficiente</span>{{item.item_name}}</a>
+            {% else %}
+              <a onclick="editItem({{item.id}});" class="black-text collection-item"><span class="red-text badge" id="item{{item.id}}">Comprar</span>{{item.item_name}}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </section>
+    <div class="divider"></div>
+    {% endif %}
+
+    {% endfor %}
+
+
+
+{% endblock body %}

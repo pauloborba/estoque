@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title> Nova Categoria </title>
+{% endblock title %}
+
+{% block body %}
+<h1 class="center"> Nova Categoria </h1>
+<form id="newCategoryForm" class="col s12" action="" method="post">
+  {% csrf_token %}
+    <div class="row">
+      <div class="input-field col s12">
+        <i class="material-icons prefix">description</i>
+        <input oninput="setCustomValidity('')" required oninvalid="this.setCustomValidity('Campo obrigatório')" id="categoryNameInput" name="name" type="text" class="validate">
+        <label for="name">Nome da categoria</label>
+      </div>
+    </div>
+
+    {% if name_taken %}
+      <div class="row">
+        <div class="col s4">
+          <p class="center red-text">Nome já em uso.</p>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="row">
+      <div class="right input-field col s6">
+        <button id="newCategoryForm" type="submit" class="waves-effect waves-light btn">
+        <i class="material-icons right">add</i>Criar categoria</button>
+      </div>
+      <div class="left input-field col s6">
+        <a href="{% url 'home' %}" type="button" class="waves-effect waves-light btn"><i class="material-icons right">cancel</i>Cancelar</a>
+      </div>
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% load static %}
+{% load staticfiles %}
+{% load compress %}
+<html lang="pt-br">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/gif" href="{% static 'favicon.ico'%}" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {% compress css %}
+    <link type="text/css" rel="stylesheet" href="{% static "css/default.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% static "materialize/dist/css/materialize.min.css" %}">
+    {% endcompress %}
+    {% compress js %}
+    <script src="{% static "jquery/dist/jquery.min.js" %}"></script>
+    <script src="{% static "materialize/dist/js/materialize.min.js" %}"></script>
+    <script src="{% static "js-cookie/src/js.cookie.js" %}"></script>
+    <script src="{% static "js/default.js" %}"></script>
+    {% endcompress %}
+
+    <meta charset="utf-8">
+    {% block title %}
+    {% endblock %}
+  </head>
+  <body>
+    <ul id="slide-out" class="hide-on-med-and-down indigo side-nav fixed">
+      <li><div class="userView">
+        <p class="whiteText">Você está logado como: <b>{{request.user.username}}</b></p>
+        <p class="whiteText">Email: {{request.user.email}}</p>
+      </div></li>
+      <li><div class="divider"></div></li>
+      <li class="center"><i class="material-icons">stars</i><h5 class="whiteText" style="display: inline;"><b>Ranking</b></h5>
+      <i class="material-icons">stars</i></li>
+      <table class="whiteText highlight bordered">
+        <thead>
+          <tr class="black-text">
+              <th>Nome</th>
+              <th>Pontuação</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+            {% if user.username == request.user.username %}
+              <tr style="background: #f5f5f5;">
+            {% else %}
+              <tr>
+            {% endif %}
+
+            {% if user.username == request.user.username %}
+              {% if forloop.counter == 1 %}
+                <td><span style="color: green"><b>Você</b></span><i style="margin-left: 5px; color: yellow; !important;" class="material-icons tiny">grade
+                </i></td>
+              {% else %}
+                <td><span style="color: green"><b>Você</b></span></td>
+              {% endif %}
+
+              <td><span class="black-text" id="userPoints">{{user.points}}</span></td>
+            {% else %}
+              {% if forloop.counter == 1 %}
+                <td><span>{{user.username}}</span><i style="margin-left: 5px; color: yellow; !important;" class="material-icons tiny">grade
+                </i></td>
+              {% else %}
+                <td><span>{{user.username}}</span></td>
+              {% endif %}
+              <td><span>{{user.points}}</span></td>
+            {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </ul>
+    <div class="bodyContent container">
+      {% block body %}
+      {% endblock %}
+    </div>
+    <footer class="bodyContent center">
+      <strong>&copy;LCGM</strong>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "stock-Manager",
+  "version": "1.0.0",
+  "authors": [
+    "Leonardo Galdino <lcgm@cin.ufpe.br>"
+  ],
+  "description": "A website to control the food stock at home",
+  "main": "manage.py",
+  "license": "UFPE",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies":{
+    "js-cookie": "latest",
+    "jquery": "latest",
+    "materialize": "latest"
+  }
+}
