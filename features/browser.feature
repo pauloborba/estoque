@@ -4,5 +4,4 @@ Feature: Demonstrate how to test Django with behave & mechanize
 
     Given a user
     When I log in
-    Then I see my account summary
-    And I see a warm and welcoming message
+    Then I am at the main page

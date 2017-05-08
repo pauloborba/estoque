@@ -7,4 +7,4 @@ install:
   - python manage.py migrate
 
 # command to run tests
-script: behave
+script: python manage.py behave

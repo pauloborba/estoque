@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'compressor',
     'custom_user',
     'manager',
+    'behave_django',
 ]
 
 MIDDLEWARE = [
@@ -137,7 +138,3 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "bower_components/")]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATIC_URL = '/static/'
-
-
-
-
