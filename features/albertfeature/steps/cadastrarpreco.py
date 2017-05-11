@@ -14,12 +14,14 @@ from django.contrib import messages
 @given('eu vejo o item "{it}" na lista de itens cadastrados')
 	def step_impl(context):
 		br = context.browser
+		controller.newItem(it)
 		itemList = br.find_by_id('itemList')
 		assert itemList.get(name = it) != null
 
 @given('eu vejo a loja "{it}" na lista de lojas cadastradas')
 	def step_impl(context):
 		br = context.browser
+		controller.newStore(it)
 		storeList = br.find_by_id('storeList')
 		assert storeList.get(name = it) != null
 
@@ -64,6 +66,9 @@ from django.contrib import messages
 #esse given serve para os dois primeiros passos do cenario
 @given('O item "{item}" esta cadastrado no sistema com o preço "{preco}" na loja "{loja}"')
 	def step_impl(context): 
+		controller.newItem(item)
+		controller.newStore(loja)
+		controller.newPrice(preco, item, loja)
 		st =  controller.objects.getLojaByID(loja)
 		assert st != null
 		it = st.getItemByID(item)
