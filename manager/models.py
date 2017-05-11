@@ -21,3 +21,24 @@ class Item(models.Model):
 
     class Meta:
         ordering = ['item_name']
+
+class Store (models.Model):
+    store_name = models.CharField(max_length=30, unique = True)
+    category = models.ForeignKey(Category) 
+    
+    def __str__(self):
+        return self.store_name
+
+class Price (models.Model):
+    cost_product = models.FloatField(default=0.0)
+    price_store = models.ForeignKey(Store)
+    price_product = models.ForeignKey(Item) #lembrar de mudar Item para Produto
+
+    def __str__(self):
+        return self.store_name
+
+
+class Residence (models.Model):
+    residence_name = models.CharField(max_length=20)
+    def __str__(self):
+        return self.residence_name
