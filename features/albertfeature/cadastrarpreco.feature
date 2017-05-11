@@ -5,8 +5,8 @@ Feature: Cadastrar precos
   	Given eu vejo o item "Milho" na lista de itens cadastrados
   	Given eu vejo a loja "Bonzao" na lista de lojas cadastradas
   	Given a loja "Bonzao" nao possui o item "Milho"
-  	When eu tento cadastrar o preco "3,00" do item "Milho" na loja "Bonzao"
-  	Then eu vejo uma mensagem informando que a loja "Bonzao" nao possui o item "Milho"
+  	When eu tento cadastrar o preco "3,00" para item "Milho" na loja "Bonzao"
+  	Then eu vejo uma mensagem informando que a loja "oBonzao" nao possui o item "Milho"
   	Then eu permaneco na pagina de cadastramento de precos
 
   Scenario: Cadastrar valor para um item existente na loja
