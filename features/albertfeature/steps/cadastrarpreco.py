@@ -30,7 +30,7 @@ from django.contrib import messages
 		storeList = br.find_by_id('storeList')
 		it = itemList.get(name = item)
 		st = storeList.get(name = loja)
-		assert !(controller.verifyItemExistence(it st))
+		assert !(controller.verifyIteminStore(it, st))
 
 @when('eu tento cadastrar o preco "{preco}" do item "{item}" na loja "{loja}"')
 	def step_impl(context):
