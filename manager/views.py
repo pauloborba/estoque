@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from custom_user.models import customUser
-from models import Item, Category, Price
+from models import *
 from reportlab.pdfgen import canvas
 import datetime
 
@@ -67,20 +67,19 @@ def new_item(request):
 @require_http_methods(["GET", "POST"])
 @login_required
 def new_price(request):
-    stores = Store.objects.all()
+    category = Category.objects.all()
     itens = Item.objects.all()
     if request.method=='GET':
-        return render(request, 'new_price.html', {'name_taken': False, 'stores': stores})
-    cost_product = request.POST["price"]
+        return render(request, 'new_price.html', {'name_taken': False, 'itens': itens, 'category': category})
+    cost_product = float(request.POST["price"])
     item = request.POST["item"]
     item = Item.objects.get(id=int(item))
-    enough = True if enough=="1" else False
-    store = request.POST["store"]
-    store = Store.objects.get(id=int(store))
+    category = request.POST["category"]
+    category = Store.objects.get(id=int(category))
     try:
-        Price.objects.create(cost_product=cost_product, price_store=store, price_product=item)
+        Price.objects.create(cost_product=cost_product, price_category=category, price_product=item)
     except IntegrityError:
-        return render(request, 'new_price.html', {'name_taken': True, 'stores': stores})
+        return render(request, 'new_price.html', {'name_taken': True, 'itens': itens, 'categoy': category})
     return HttpResponseRedirect(reverse("home"))
     
 

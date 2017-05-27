@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls, name="admPage"),
     url(r'^$', views.home_login, name="home_login"),
     url(r'^signUp_old/$', views.sign_up, name="sign_up"),
+    url(r'^newPrice/$', views.new_price, name="new_price"),
     url(r'^newItem_old/$', views.new_item, name="new_item"),
     url(r'^editItem/$', views.edit_item, name="new_editItemById"),
     url(r'^newCategory_old/$', views.new_category, name="new_category"),

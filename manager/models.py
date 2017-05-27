@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 class Store (models.Model):
-    store_name = models.CharField(max_length=30, unique = True)
+    store_name = models.CharField(max_length=30, unique=True)
     def __str__(self):
         return self.store_name
     class Meta:
@@ -14,7 +14,7 @@ class Category(models.Model):
     category_store = models.ForeignKey(Store)
     
     def __str__(self):
-        return self.category_name.encode('ascii', 'ignore')
+        return self.category_name.encode('ascii', 'ignore') + " - " +str(self.category_store.store_name)
 
     class Meta:
         ordering=['category_name']
@@ -38,10 +38,10 @@ class Item(models.Model):
 
 class Price (models.Model):
     cost_product = models.FloatField(default=0.0)
-    price_store = models.ForeignKey(Store) #se trocar para categoria, todos os supermercados devem ter categoria
+    price_category = models.ForeignKey(Category) #se trocar para categoria, todos os supermercados devem ter categoria
     price_product = models.ForeignKey(Item) #lembrar de mudar Item para Produto
     class Meta:
-        unique_together = ('price_store', 'price_product', 'cost_product')
+        unique_together = ('price_category', 'price_product', 'cost_product')
 
     def __str__(self):
-        return str(self.price_product) + ' - ' + str(self.price_store.store_name)
+        return str(self.price_product) + ' - '+str(self.price_category.category_store.store_name)
