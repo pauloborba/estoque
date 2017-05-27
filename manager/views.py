@@ -64,29 +64,30 @@ def new_item(request):
         return render(request, 'new_item.html', {'name_taken': True, 'categories': categories})
     return HttpResponseRedirect(reverse("home"))
 
+
 @require_http_methods(["GET", "POST"])
 @login_required
 def new_price(request):
-    category = Category.objects.all()
+    categories = Category.objects.all()
     itens = Item.objects.all()
-    if request.method=='GET':
-        return render(request, 'new_price.html', {'name_taken': False, 'itens': itens, 'category': category})
+    if request.method == 'GET':
+        return render(request, 'new_price.html', {'name_taken': False, 'itens': itens, 'categories': categories})
     cost_product = float(request.POST["price"])
     item = request.POST["item"]
     item = Item.objects.get(id=int(item))
     category = request.POST["category"]
-    category = Store.objects.get(id=int(category))
+    category = Category.objects.get(id=int(category))
     try:
         Price.objects.create(cost_product=cost_product, price_category=category, price_product=item)
     except IntegrityError:
-        return render(request, 'new_price.html', {'name_taken': True, 'itens': itens, 'categoy': category})
-    return HttpResponseRedirect(reverse("home"))
+        return render(request, 'new_price.html', {'name_taken': True, 'itens': itens, 'categoy': categories})
+    return HttpResponseRedirect(reverse("test"))
     
 
 @require_http_methods(["POST"])
 @login_required
 def edit_item(request):
-    item_id = request.POST["id"];
+    item_id = request.POST["id"]
     item_to_edit = Item.objects.get(id=item_id)
     request.user.points += 1
     request.user.save()
