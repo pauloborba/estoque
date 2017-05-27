@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from custom_user.models import customUser
-from models import Item, Category
+from models import Item, Category, Price
 from reportlab.pdfgen import canvas
 import datetime
 
@@ -33,6 +33,10 @@ def home(request):
     cat = Category.objects.all()
     return render(request, 'home.html', {'categories': cat})
 
+def test(request):
+    prices = Price.objects.all()
+    return render(request, 'teste.html', {'prices': prices})
+
 @require_http_methods(["GET", "POST"])
 def sign_up(request):
     if request.method=='GET':
@@ -55,7 +59,7 @@ def new_item(request):
     category = request.POST["category"]
     category = Category.objects.get(id=int(category))
     try:
-        newItem = Item.objects.create(item_name=item_name, enough=enough, category=category)
+        Item.objects.create(item_name=item_name, enough=enough, category=category)
     except IntegrityError:
         return render(request, 'new_item.html', {'name_taken': True, 'categories': categories})
     return HttpResponseRedirect(reverse("home"))

@@ -14,14 +14,14 @@ from django.contrib import messages
 @given('eu vejo o item "{it}" na lista de itens cadastrados')
 	def step_impl(context):
 		br = context.browser
-		controller.newItem(it)
+		Controller.newItem(it)
 		itemList = br.find_by_id('itemList')
 		assert itemList.get(name = it) != null
 
 @given('eu vejo a loja "{it}" na lista de lojas cadastradas')
 	def step_impl(context):
 		br = context.browser
-		controller.newStore(it)
+		Controller.newStore(it)
 		storeList = br.find_by_id('storeList')
 		assert storeList.get(name = it) != null
 
@@ -34,7 +34,7 @@ from django.contrib import messages
 		st = storeList.get(name = loja)
 		assert !(controller.verifyIteminStore(it, st))
 
-@when('eu tento cadastrar o preco "{preco}" do item "{item}" na loja "{loja}"')
+@when('eu tento cadastrar o preco "{preco}" para o item "{item}" na loja "{loja}"')
 	def step_impl(context):
 		br = context.browser
 		itemList = br.find_by_id('itemList')
@@ -50,7 +50,7 @@ from django.contrib import messages
 
 @then('eu vejo uma mensagem informando que a loja "{loja}" nao possui o item "{item}"')
 	def step_impl(context): 
-		controller.showException(["pt-br", "A loja "+loja+" não possui o item "+item])
+		Controller.showException(["pt-br", "A loja "+loja+" não possui o item "+item])
 
 @then('eu permaneco na pagina de cadastramento de precos')
 	def step_impl(context): 
@@ -58,27 +58,3 @@ from django.contrib import messages
 	    response = br.status_code
 	    assert response.code == 200
 	    assert br.url.endswith("/newPrice/")
-
-
-
-#  Scenario : Sobrescrever um preco já cadastrado - Controller
-
-#esse given serve para os dois primeiros passos do cenario
-@given('O item "{item}" esta cadastrado no sistema com o preço "{preco}" na loja "{loja}"')
-	def step_impl(context): 
-		controller.newItem(item)
-		controller.newStore(loja)
-		controller.newPrice(preco, item, loja)
-		st =  controller.objects.getLojaByID(loja)
-		assert st != null
-		it = st.getItemByID(item)
-		assert it !=null
-		assert it.getPrice() == preco
-
-#o when desse cenario é igual o anterior
-@then('o sistema sobrescreve o preco do item "{item}" na loja "{loja}" para o valor "{preco}"')
-	def step_impl(context):
-		st = controller.objects.getLojaByID(loja)
-		it = st.getItemByID(item)
-		controller.setPrice(it, st, preco)
-		assert controler.getPrice(it, st) == preco
