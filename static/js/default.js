@@ -56,3 +56,7 @@ function validate_new_item(){
   else
     Materialize.toast('Nome é obrigatório!', 4000);
 }
+
+function create_list_store(st_name){
+  //Store st = Store.find();
+}

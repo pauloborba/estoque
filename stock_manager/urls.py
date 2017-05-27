@@ -25,10 +25,11 @@ urlpatterns = [
     url(r'^newItem_old/$', views.new_item, name="new_item"),
     url(r'^editItem/$', views.edit_item, name="new_editItemById"),
     url(r'^newCategory_old/$', views.new_category, name="new_category"),
+    url(r'^newStore/$', views.new_store, name="new_store"),
     url(r'^home/$', views.home, name="home"),
     url(r'^genPdf/$', views.generate_pdf, name="pdfGen"),
     url(r'^logout/$', views.logout_view, name="logout"),
     url(r'^test/$', views.test, name="test"),
-
+    url(r'^newListByStore/$', views.create_list_by_store, name="listByStore"),
 ]
 urlpatterns += staticfiles_urlpatterns()
