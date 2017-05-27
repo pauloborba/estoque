@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db import IntegrityError
+from django.db.models.sql import EmptyResultSet
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -33,9 +34,9 @@ def home(request):
     cat = Category.objects.all()
     return render(request, 'home.html', {'categories': cat})
 
-def test(request):
+def price_list(request):
     prices = Price.objects.all()
-    return render(request, 'teste.html', {'prices': prices})
+    return render(request, 'price_list.html', {'prices': prices})
 
 @require_http_methods(["GET", "POST"])
 def sign_up(request):
@@ -78,11 +79,16 @@ def new_price(request):
     category = request.POST["category"]
     category = Category.objects.get(id=int(category))
     try:
+        price = Price.objects.get(price_category=category, price_product=item)
+    except:
         Price.objects.create(cost_product=cost_product, price_category=category, price_product=item)
-    except IntegrityError:
-        return render(request, 'new_price.html', {'name_taken': True, 'itens': itens, 'categoy': categories})
-    return HttpResponseRedirect(reverse("test"))
-    
+        x = Price.objects.all()
+        return render(request, 'price_list.html', {'name_taken': False, 'prices': x})
+    price.cost_product = cost_product;
+    price.save()
+    return HttpResponseRedirect(reverse("price_list"))
+
+
 
 @require_http_methods(["POST"])
 @login_required

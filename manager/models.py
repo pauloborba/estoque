@@ -41,7 +41,7 @@ class Price (models.Model):
     price_category = models.ForeignKey(Category) #se trocar para categoria, todos os supermercados devem ter categoria
     price_product = models.ForeignKey(Item) #lembrar de mudar Item para Produto
     class Meta:
-        unique_together = ('price_category', 'price_product', 'cost_product')
+        unique_together = ('price_category', 'price_product')
 
     def __str__(self):
         return str(self.price_product) + ' - '+str(self.price_category.category_store.store_name)

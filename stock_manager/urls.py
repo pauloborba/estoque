@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^home/$', views.home, name="home"),
     url(r'^genPdf/$', views.generate_pdf, name="pdfGen"),
     url(r'^logout/$', views.logout_view, name="logout"),
-    url(r'^test/$', views.test, name="test"),
+    url(r'^priceList/$', views.price_list, name="price_list"),
 
 ]
 urlpatterns += staticfiles_urlpatterns()
