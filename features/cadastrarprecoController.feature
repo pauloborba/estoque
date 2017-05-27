@@ -4,6 +4,7 @@ Feature: Cadastrar preco
   	Given o item "Sabao" esta cadastrado no sistema com o preço "7,00" na loja "Merc"
   	Given o item "Feijao" esta cadastrado no sistema com o preço "10,00" na loja "Varejão"
   	When eu tento cadastrar o preco "5,00" do item "Sabao" na loja "Merc"
+    When eu atualizo o preco "7,00" para o preco "5,00" do item "Sabao" na loja "Merc"
   	Then o sistema sobrescreve o preco do item "Sabao" na loja "Merc" para o valor "5,00"
   	And o item "Feijao" continua com o valor "10,00" na loja "Varejao"
 

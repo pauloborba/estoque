@@ -64,6 +64,26 @@ def new_item(request):
         return render(request, 'new_item.html', {'name_taken': True, 'categories': categories})
     return HttpResponseRedirect(reverse("home"))
 
+@require_http_methods(["GET", "POST"])
+@login_required
+def new_price(request):
+    stores = Store.objects.all()
+    itens = Item.objects.all()
+    if request.method=='GET':
+        return render(request, 'new_price.html', {'name_taken': False, 'stores': stores})
+    cost_product = request.POST["price"]
+    item = request.POST["item"]
+    item = Item.objects.get(id=int(item))
+    enough = True if enough=="1" else False
+    store = request.POST["store"]
+    store = Store.objects.get(id=int(store))
+    try:
+        Price.objects.create(cost_product=cost_product, price_store=store, price_product=item)
+    except IntegrityError:
+        return render(request, 'new_price.html', {'name_taken': True, 'stores': stores})
+    return HttpResponseRedirect(reverse("home"))
+    
+
 @require_http_methods(["POST"])
 @login_required
 def edit_item(request):

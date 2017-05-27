@@ -6,6 +6,8 @@ class Store (models.Model):
     store_name = models.CharField(max_length=30, unique = True)
     def __str__(self):
         return self.store_name
+    class Meta:
+        ordering=['store_name']
 
 class Category(models.Model):
     category_name = models.CharField(max_length=30, unique=True)
@@ -36,7 +38,7 @@ class Item(models.Model):
 
 class Price (models.Model):
     cost_product = models.FloatField(default=0.0)
-    price_store = models.ForeignKey(Store)
+    price_store = models.ForeignKey(Store) #se trocar para categoria, todos os supermercados devem ter categoria
     price_product = models.ForeignKey(Item) #lembrar de mudar Item para Produto
     class Meta:
         unique_together = ('price_store', 'price_product', 'cost_product')
