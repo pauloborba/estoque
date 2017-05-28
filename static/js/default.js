@@ -60,6 +60,17 @@ function validate_new_price(){
     Materialize.toast('Preço é obrigatório!', 4000);
 }
 
+function validate_new_item(){
+  name = document.getElementById("itemNameInput").value;
+  qty = document.getElementById("itemQtyInput").value;
+  min_qty = document.getElementById("itemMinQtyInput").value;
+  if(isValid(name) && isValid(qty.toString()) && isValid(min_qty.toString()))
+    document.getElementById("newItemForm").submit();
+  else
+    Materialize.toast('Preencha todos os campos!', 4000);
+}
+
+
 function validate_new_category(){
   cat_name = document.getElementById("categoryNameInput").value;
   store = document.getElementById("storeInput").value;
@@ -85,3 +96,4 @@ function hidePanel(id){
   else
     ref.removeAttr('hidden');
 }
+

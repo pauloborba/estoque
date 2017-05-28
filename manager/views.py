@@ -57,14 +57,12 @@ def sign_up(request):
 def new_item(request):
     categories = Category.objects.all()
     if request.method=='GET':
-        return render(request, 'new_item.html', {'name_taken': False, 'categories': categories})
+        return render(request, 'new_item.html', {'name_taken': False})
     item_name = request.POST["name"].capitalize()
-    enough = request.POST["enough"]
-    enough = True if enough=="1" else False
-    category = request.POST["category"]
-    category = Category.objects.get(id=int(category))
+    qty = int(request.POST["qty"])
+    min_qty = int(request.POST["min_qty"])
     try:
-        Item.objects.create(item_name=item_name, enough=enough, category=category)
+        Item.objects.create(item_name=item_name, qty=qty, min_qty=min_qty)
     except IntegrityError:
         return render(request, 'new_item.html', {'name_taken': True, 'categories': categories})
     return HttpResponseRedirect(reverse("home"))
