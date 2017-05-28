@@ -143,13 +143,16 @@ def generate_list(request):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = "attachment; filename='"+'lista'+".pdf'"
     p = canvas.Canvas(response)
-    i = 0
+    p.drawImage("static/favicon.ico", 30, 800)
+    p.drawString(50, 804, "Stock Manager")
+    i = 2
     stores = request.POST.getlist('store_checkbox')
     stores = Store.objects.filter(id__in=stores)
     for store in stores:
         p.setFont("Helvetica", 25)
         p.drawString(35, (800-(30*i)), store.store_name)
         i += 1
+        total_price = 0
         for cat in store.category_set.all():
             products = Price.objects.filter(price_category=cat)
             if not products:
@@ -161,11 +164,12 @@ def generate_list(request):
                 if prod.price_product.qty < prod.price_product.min_qty:
                     p.setFont("Helvetica", 15)
                     name = prod.price_product.item_name
-                    p.drawString(200, (800-(30*i)), name)
-                    p.drawString(240+(len(name)*5), (800-(30*i)), ' - ')
-                    p.drawString(240+(len(name)*10), (800-(30*i)), str(prod.cost_product))
+                    p.drawString(200, (800-(30*i)), name + ' - R$ ' + str(prod.cost_product))
+                    total_price += prod.cost_product
                     i += 1
             i += 1
+        p.setFont("Helvetica", 25)
+        p.drawString(35, (800-(30*i)), 'Total ' + store.store_name + ' - R$ ' + str(total_price))
     p.showPage()
     p.save()
     return response
