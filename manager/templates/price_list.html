@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% block title %}
-  <title> Teste </title>
+  <title> Preços Cadastrados </title>
 {% endblock title %}
 
 {% block body %}
+{% include 'menu.html' %}
 <h3>
 	Relação Produto-Loja-Preço
 </h3>
 	<div class="row">
 		<div class="collection col s12" style="padding-left: 0px; padding-right: 0px;">
 			{% for price in prices %}
-				<a href="http://localhost:8002/admin/manager/price/{{price.id}}/change/" class="collection-item">
+				<a href="/admin/manager/price/{{price.id}}/change/" class="collection-item">
 					{{price.price_product.item_name}} - {{price.price_category.category_store.store_name}} - {{price.cost_product}}
 				</a>
 			{% endfor %}

@@ -6,32 +6,93 @@
 
 {% block body %}
   {% include 'menu.html' %}
-  <header class="row">
-    <div class="col s12 center">
-      <h1 class="indigo-text" id="userWelcome"> Você tem {{request.user.points}} pontos </h1>
-    </div>
-  </header>
-    {% for category in categories %}
-    {% if category.item_set.all %}
-    <section class="row">
-      <header class="center">
-        <h4 style="color: rgba(0, 0, 0, 0.6);"> {{category.category_name}} </h4>
-      </header>
-        <div class="collection col s12">
-          {% for item in category.item_set.all %}
-            {% if item.enough %}
-              <a onclick="editItem({{item.id}});" class="black-text collection-item"><span class="green-text badge" id="item{{item.id}}">Suficiente</span>{{item.item_name}}</a>
-            {% else %}
-              <a onclick="editItem({{item.id}});" class="black-text collection-item"><span class="red-text badge" id="item{{item.id}}">Comprar</span>{{item.item_name}}</a>
-            {% endif %}
-          {% endfor %}
+  <h1 class="center"> Bem-vindo </h1>
+
+  <div class="row">
+
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Como usar o sistema?</span>
+          <p>Navegue pelas instruções de como usar o sistema.</p>
         </div>
-      </section>
-    <div class="divider"></div>
-    {% endif %}
+        <div class="card-action">
+          <a href="{% url 'help' %}">Ajuda<i style="padding-left: 3px; font-size: 20px; position: absolute; top: 16px;" class="material-icons">live_help</i></a>
+        </div>
+      </div>
+    </div>
 
-    {% endfor %}
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Criar uma loja.</span>
+          <p>Cadastre uma loja onde você costuma comprar.</p>
+        </div>
+        <div class="card-action">
+          <a href="/admin/manager/store/add/">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+        </div>
+      </div>
+    </div>
 
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Criar um item.</span>
+          <p>Cadastre um item na relação de itens.</p>
+        </div>
+        <div class="card-action">
+          <a href="/admin/manager/item/add/">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+        </div>
+      </div>
+    </div>
 
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Criar uma categoria.</span>
+          <p>Cadastre uma categoria em uma loja já criada.</p>
+        </div>
+        <div class="card-action">
+          <a href="/admin/manager/category/add/">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Criar um preço.</span>
+          <p>Associe um preço a um produto em uma loja.</p>
+        </div>
+        <div class="card-action">
+          <a href="{% url 'new_price' %}">Criar<i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Baixar lista de loja.</span>
+          <p>Selecione uma loja e baixe em PDF a lista dessa loja.</p>
+        </div>
+        <div class="card-action">
+          <a href="{% url 'listByStore' %}">Baixar<i style="position: absolute; top: 13px;" class="material-icons">play_for_work</i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Baixar lista de várias lojas.</span>
+          <p>Escolha as lojas que você deseja incluir na lista.</p>
+        </div>
+        <div class="card-action">
+          <a href="{% url 'generate_list' %}">Baixar<i style="position: absolute; top: 13px;" class="material-icons">play_for_work</i></a>
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock body %}

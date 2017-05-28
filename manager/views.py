@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from custom_user.models import customUser
+from models import Item, Category, Price, Store
 from models import *
 from reportlab.pdfgen import canvas
 import datetime
@@ -30,12 +31,16 @@ def home_login(request):
 @require_http_methods(["GET"])
 @login_required
 def home(request):
-    cat = Category.objects.all()
-    return render(request, 'home.html', {'categories': cat})
+    return render(request, 'home.html', {'is_home': True})
 
-def test(request):
+@require_http_methods(["GET"])
+@login_required
+def help(request):
+    return render(request, 'help.html')
+
+def price_list(request):
     prices = Price.objects.all()
-    return render(request, 'teste.html', {'prices': prices})
+    return render(request, 'price_list.html', {'prices': prices})
 
 @require_http_methods(["GET", "POST"])
 def sign_up(request):
@@ -78,16 +83,20 @@ def new_price(request):
     category = request.POST["category"]
     category = Category.objects.get(id=int(category))
     try:
+        price = Price.objects.get(price_category=category, price_product=item)
+    except:
         Price.objects.create(cost_product=cost_product, price_category=category, price_product=item)
-    except IntegrityError:
-        return render(request, 'new_price.html', {'name_taken': True, 'itens': itens, 'categoy': categories})
-    return HttpResponseRedirect(reverse("test"))
-    
+        x = Price.objects.all()
+        return render(request, 'price_list.html', {'name_taken': False, 'prices': x})
+    price.cost_product = cost_product;
+    price.save()
+    return HttpResponseRedirect(reverse("price_list"))
+
 
 @require_http_methods(["POST"])
 @login_required
 def edit_item(request):
-    item_id = request.POST["id"]
+    item_id = request.POST["id"];
     item_to_edit = Item.objects.get(id=item_id)
     request.user.points += 1
     request.user.save()
@@ -105,6 +114,19 @@ def new_category(request):
         Category.objects.create(category_name=category_name)
     except IntegrityError:
         return render(request, 'new_category.html', {'name_taken': True})
+    return HttpResponseRedirect(reverse("home"))
+
+
+@require_http_methods(["GET", "POST"])
+@login_required
+def new_store(request):
+    if request.method == 'GET':
+        return render(request, 'new_store.html', {'name_taken': False})
+    store_name = request.POST["name"].capitalize()
+    try:
+        Store.objects.create(store_name=store_name)
+    except IntegrityError:
+        return render(request, 'new_store.html', {'name_taken': True})
     return HttpResponseRedirect(reverse("home"))
 
 @login_required
@@ -172,13 +194,58 @@ def generate_pdf(request):
         if not items:
             continue
         p.setFont("Helvetica", 25)
-        p.drawString(250, (800-(30*i)), cat.category_name)
+        p.drawString(250, (800 - (30 * i)), cat.category_name)
         i += 1
         for item in items:
             p.setFont("Helvetica", 15)
-            p.drawString(200, (800-(30*i)), item.item_name)
+            p.drawString(200, (800 - (30 * i)), item.item_name)
             i += 1
         i += 1
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+    return response
+
+
+@require_http_methods(["GET", "POST"])
+@login_required
+def create_list_by_store(request):
+    stores = Store.objects.all()
+    cat = Category.objects.all()
+    prices = Price.objects.all()
+    return render(request, 'new_list_store.html', {'stores': stores, 'categories': cat, 'prices': prices})
+
+
+@require_http_methods(["GET", "POST"])
+@login_required
+def create_store_file(request):
+    stores = Store.objects.all()
+    id = request.POST["store"]
+    file_name = ''
+    response = HttpResponse(content_type='application/pdf')
+    for store in stores:
+        if store.id == id:
+            file_name = store.store_name
+            categories = store.category_set.filter(category_store=id)
+            response['Content-Disposition'] = "attachment; filename='" + file_name + ".pdf'"
+
+            # Create the PDF object, using the response object as its "file."
+            p = canvas.Canvas(response)
+
+            i = 0
+            for cat in categories:
+                items = cat.item_set.filter(enough=False)
+                if not items:
+                    continue
+                p.setFont("Helvetica", 25)
+                p.drawString(250, (800 - (30 * i)), cat.category_name)
+                i += 1
+                for item in items:
+                    p.setFont("Helvetica", 15)
+                    p.drawString(200, (800 - (30 * i)), item.item_name)
+                    i += 1
+                i += 1
 
     # Close the PDF object cleanly, and we're done.
     p.showPage()
