@@ -26,7 +26,8 @@ class Residence (models.Model):
 
 class Item(models.Model):
     item_name = models.CharField(max_length=30, unique=True)
-    enough = models.BooleanField(default=True)
+    qty = models.IntegerField(default=0)
+    min_qty = models.IntegerField(default=5)
     #products = models.ForeignKey(Residence)
 
     def __str__(self):
