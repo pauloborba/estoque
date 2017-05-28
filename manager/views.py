@@ -158,12 +158,13 @@ def generate_list(request):
             p.drawString(120, (800-(30*i)), cat.category_name)
             i += 1
             for prod in products:
-                p.setFont("Helvetica", 15)
-                name = prod.price_product.item_name
-                p.drawString(200, (800-(30*i)), name)
-                p.drawString(240+(len(name)*5), (800-(30*i)), ' - ')
-                p.drawString(240+(len(name)*10), (800-(30*i)), str(prod.cost_product))
-                i += 1
+                if prod.price_product.qty < prod.price_product.min_qty:
+                    p.setFont("Helvetica", 15)
+                    name = prod.price_product.item_name
+                    p.drawString(200, (800-(30*i)), name)
+                    p.drawString(240+(len(name)*5), (800-(30*i)), ' - ')
+                    p.drawString(240+(len(name)*10), (800-(30*i)), str(prod.cost_product))
+                    i += 1
             i += 1
     p.showPage()
     p.save()
