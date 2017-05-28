@@ -70,3 +70,18 @@ function validate_new_item(){
   else
     Materialize.toast('Nome é obrigatório!', 4000);
 }
+
+function check_no_stores(){
+  if($("input:checkbox:checked").length > 0)
+    $("#generateListForm").submit();
+  else
+    Materialize.toast('Nenhuma loja selecionada!', 4000);
+}
+
+function hidePanel(id){
+  let ref = $('#'+id);
+  if(ref.attr('hidden') === undefined || ref.attr === false)
+    ref.attr('hidden', 'hidden');
+  else
+    ref.removeAttr('hidden');
+}

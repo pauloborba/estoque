@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}
+	<title> Escolher Lojas </title>
+{% endblock title %}
+
+{% block body %}
+	{% include 'menu.html' %}
+	<h1 class="center"> Escolha as lojas a serem visitadas: </h1>
+	<form id="generateListForm" action="" method="POST">
+	{% csrf_token %}
+  	{% for store in stores %}
+		<div style="padding-bottom: 10px;">
+			<input onclick="hidePanel('panel-'+{{store.id}})" value="{{store.id}}" name="store_checkbox" type="checkbox" checked class="filled-in" id="{{store.id}}" style = "vertical-align: middle" />
+      		<label style="color: black;" for="{{store.id}}">{{store.store_name}}</label>
+      	</div>
+      	<div id="panel-{{store.id}}" class="card-panel">
+		  	<table class="bordered highlight">
+		      	<thead>
+		      		<th>Produto</th>
+		      		<th>Categoria</th>
+		      		<th>Preço</th>
+		      	</thead>
+		      	<tbody>
+		      		{% for cat in store.category_set.all %}
+		      			{% for price in cat.price_set.all %}
+		      				<tr>
+			      				<td> {{price.price_product.item_name}} </td>
+			      				<td> {{cat.category_name}} </td>
+			      				<td> R$ {{price.cost_product}} </td>
+			      			</tr>
+		      			{% endfor %}
+		      		{% endfor %}
+		      	</tbody>
+		    </table>
+      	</div>
+	{% endfor %}
+		<div class="right input-field col s6">
+	        <button id="updateList" onclick="check_no_stores();" type="button" class="waves-effect waves-light btn">
+	        <i class="material-icons right"></i>Gerar lista</button>
+	    </div>
+	</form>
+
+{% endblock body %}
+

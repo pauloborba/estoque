@@ -113,6 +113,44 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("home_login"))
 
 @login_required
+@require_http_methods(["GET", "POST"])
+def generate_list(request):
+    if request.method == 'GET':
+        stores = Store.objects.all()
+        return render(request, 'chooseStores.html', {'stores': stores})
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = "attachment; filename='"+'lista'+".pdf'"
+    p = canvas.Canvas(response)
+    i = 0
+    stores = request.POST.getlist('store_checkbox')
+    stores = Store.objects.filter(id__in=stores)
+    for store in stores:
+        p.setFont("Helvetica", 25)
+        p.drawString(35, (800-(30*i)), store.store_name)
+        i += 1
+        for cat in store.category_set.all():
+            products = Price.objects.filter(price_category=cat)
+            if not products:
+                continue
+            p.setFont("Helvetica", 20)
+            p.drawString(120, (800-(30*i)), cat.category_name)
+            i += 1
+            for prod in products:
+                p.setFont("Helvetica", 15)
+                name = prod.price_product.item_name
+                p.drawString(200, (800-(30*i)), name)
+                p.drawString(240+(len(name)*5), (800-(30*i)), ' - ')
+                p.drawString(240+(len(name)*10), (800-(30*i)), str(prod.cost_product))
+                i += 1
+            i += 1
+    p.showPage()
+    p.save()
+    return response
+
+    
+
+
+@login_required
 def generate_pdf(request):
     today_date = datetime.datetime.today()
     day = ("0"+str(today_date.day)) if today_date.day < 10 else str(today_date.day)

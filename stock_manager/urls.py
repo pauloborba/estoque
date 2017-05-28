@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^newCategory_old/$', views.new_category, name="new_category"),
     url(r'^home/$', views.home, name="home"),
     url(r'^genPdf/$', views.generate_pdf, name="pdfGen"),
+    url(r'^generate_list/$', views.generate_list, name="generate_list"),
     url(r'^logout/$', views.logout_view, name="logout"),
     url(r'^test/$', views.test, name="test"),
 
