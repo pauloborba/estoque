@@ -23,7 +23,11 @@
 		      	<tbody>
 		      		{% for cat in store.category_set.all %}
 		      			{% for price in cat.price_set.all %}
-		      				<tr>
+		      				{% if price.price_product.qty > price.price_product.min_qty %}
+		      					<tr style="color: green;">
+		      				{% else %}
+		      					<tr style="color: red;">
+		      				{% endif %}
 			      				<td> {{price.price_product.item_name}} </td>
 			      				<td> {{cat.category_name}} </td>
 			      				<td> R$ {{price.cost_product}} </td>
