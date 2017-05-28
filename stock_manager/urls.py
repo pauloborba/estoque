@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls, name="admPage"),
     url(r'^$', views.home_login, name="home_login"),
     url(r'^signUp_old/$', views.sign_up, name="sign_up"),
+    url(r'^newPrice/$', views.new_price, name="new_price"),
     url(r'^newItem_old/$', views.new_item, name="new_item"),
     url(r'^editItem/$', views.edit_item, name="new_editItemById"),
     url(r'^newCategory_old/$', views.new_category, name="new_category"),
@@ -29,7 +30,7 @@ urlpatterns = [
     url(r'^home/$', views.home, name="home"),
     url(r'^genPdf/$', views.generate_pdf, name="pdfGen"),
     url(r'^logout/$', views.logout_view, name="logout"),
-    url(r'^test/$', views.test, name="test"),
+    url(r'^priceList/$', views.price_list, name="price_list"),
     url(r'^newListByStore/$', views.create_list_by_store, name="listByStore"),
 ]
 urlpatterns += staticfiles_urlpatterns()

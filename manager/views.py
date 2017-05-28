@@ -7,11 +7,13 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from custom_user.models import customUser
 from models import Item, Category, Price, Store
+from models import *
 from reportlab.pdfgen import canvas
 import datetime
 
 
-@require_http_methods(["GET", "POST"])
+
+@require_http_methods(["GET","POST"])
 def home_login(request):
     if request.method == "GET":
         if request.user.is_authenticated():
@@ -26,22 +28,19 @@ def home_login(request):
             return HttpResponseRedirect(reverse('home'))
     return render(request, 'home_login.html', {'error': True})
 
-
 @require_http_methods(["GET"])
 @login_required
 def home(request):
     cat = Category.objects.all()
     return render(request, 'home.html', {'categories': cat})
 
-
 def test(request):
     prices = Price.objects.all()
     return render(request, 'teste.html', {'prices': prices})
 
-
 @require_http_methods(["GET", "POST"])
 def sign_up(request):
-    if request.method == 'GET':
+    if request.method=='GET':
         return render(request, 'sign_up.html')
     username = request.POST["username"]
     password = request.POST["password"]
@@ -49,16 +48,15 @@ def sign_up(request):
     customUser.objects.create_user(username, email, password)
     return HttpResponseRedirect(reverse("home_login"))
 
-
 @require_http_methods(["GET", "POST"])
 @login_required
 def new_item(request):
     categories = Category.objects.all()
-    if request.method == 'GET':
+    if request.method=='GET':
         return render(request, 'new_item.html', {'name_taken': False, 'categories': categories})
     item_name = request.POST["name"].capitalize()
     enough = request.POST["enough"]
-    enough = True if enough == "1" else False
+    enough = True if enough=="1" else False
     category = request.POST["category"]
     category = Category.objects.get(id=int(category))
     try:
@@ -71,21 +69,24 @@ def new_item(request):
 @require_http_methods(["GET", "POST"])
 @login_required
 def new_price(request):
-    stores = Store.objects.all()
+    categories = Category.objects.all()
     itens = Item.objects.all()
     if request.method == 'GET':
-        return render(request, 'new_price.html', {'name_taken': False, 'stores': stores})
-    cost_product = request.POST["price"]
+        return render(request, 'new_price.html', {'name_taken': False, 'itens': itens, 'categories': categories})
+    cost_product = float(request.POST["price"])
     item = request.POST["item"]
     item = Item.objects.get(id=int(item))
-    enough = True if enough == "1" else False
-    store = request.POST["store"]
-    store = Store.objects.get(id=int(store))
+    category = request.POST["category"]
+    category = Category.objects.get(id=int(category))
     try:
-        Price.objects.create(cost_product=cost_product, price_store=store, price_product=item)
-    except IntegrityError:
-        return render(request, 'new_price.html', {'name_taken': True, 'stores': stores})
-    return HttpResponseRedirect(reverse("home"))
+        price = Price.objects.get(price_category=category, price_product=item)
+    except:
+        Price.objects.create(cost_product=cost_product, price_category=category, price_product=item)
+        x = Price.objects.all()
+        return render(request, 'price_list.html', {'name_taken': False, 'prices': x})
+    price.cost_product = cost_product;
+    price.save()
+    return HttpResponseRedirect(reverse("price_list"))
 
 
 @require_http_methods(["POST"])
@@ -99,11 +100,10 @@ def edit_item(request):
     item_to_edit.save()
     return HttpResponse(request.user.points);
 
-
 @require_http_methods(["GET", "POST"])
 @login_required
 def new_category(request):
-    if request.method == 'GET':
+    if request.method=='GET':
         return render(request, 'new_category.html', {'name_taken': False})
     category_name = request.POST["name"].capitalize()
     try:
@@ -131,15 +131,14 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("home_login"))
 
-
 @login_required
 def generate_pdf(request):
     today_date = datetime.datetime.today()
-    day = ("0" + str(today_date.day)) if today_date.day < 10 else str(today_date.day)
-    month = ("0" + str(today_date.month)) if today_date.month < 10 else str(today_date.month)
-    file_name = "feira_" + day + "_" + month + "_" + str(today_date.year)
+    day = ("0"+str(today_date.day)) if today_date.day < 10 else str(today_date.day)
+    month = ("0"+str(today_date.month)) if today_date.month < 10 else str(today_date.month)
+    file_name = "feira_"+day+"_"+month+"_"+str(today_date.year)
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = "attachment; filename='" + file_name + ".pdf'"
+    response['Content-Disposition'] = "attachment; filename='"+file_name+".pdf'"
 
     # Create the PDF object, using the response object as its "file."
     p = canvas.Canvas(response)
