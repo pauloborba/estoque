@@ -34,9 +34,9 @@ def home(request):
     cat = Category.objects.all()
     return render(request, 'home.html', {'categories': cat})
 
-def test(request):
+def price_list(request):
     prices = Price.objects.all()
-    return render(request, 'teste.html', {'prices': prices})
+    return render(request, 'price_list.html', {'prices': prices})
 
 @require_http_methods(["GET", "POST"])
 def sign_up(request):

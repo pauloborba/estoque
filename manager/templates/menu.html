@@ -4,8 +4,16 @@
     </a>
     <ul>
         <li>
+            <a href="{% url 'new_price' %}" class="btn-floating tooltipped grey" data-position="left"
+               data-delay="50" data-tooltip="Cadastrar preço"><i class="material-icons">add</i></a>
+        </li>
+        <li>
             <a href="{% url 'new_item' %}" class="btn-floating tooltipped blue" data-position="left"
                data-delay="50" data-tooltip="Novo produto"><i class="material-icons">add</i></a>
+        </li>
+        <li>
+            <a href="{% url 'price_list' %}" class="btn-floating tooltipped grey" data-position="left"
+               data-delay="50" data-tooltip="Lista de Preços"><i class="material-icons">view_list</i></a>
         </li>
         <li>
             <a href="{% url 'new_category' %}" class="btn-floating tooltipped green darken-1" data-position="left"

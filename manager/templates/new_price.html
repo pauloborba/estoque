@@ -10,6 +10,7 @@
 -->
 
 {% block body %}
+{% include 'menu.html' %}
 <h1 class="center"> Novo Preço </h1>
 <form id="newPriceForm" action="" method="post">
   {% csrf_token %}
