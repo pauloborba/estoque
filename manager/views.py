@@ -107,14 +107,18 @@ def edit_item(request):
 @require_http_methods(["GET", "POST"])
 @login_required
 def new_category(request):
+    stores = Store.objects.all()
     if request.method=='GET':
-        return render(request, 'new_category.html', {'name_taken': False})
+        return render(request, 'new_category.html', {'name_taken': False, 'stores': stores})
     category_name = request.POST["name"].capitalize()
+    store = request.POST["store"]
+    store = Store.objects.get(id=store)
     try:
-        Category.objects.create(category_name=category_name)
-    except IntegrityError:
-        return render(request, 'new_category.html', {'name_taken': True})
-    return HttpResponseRedirect(reverse("home"))
+        Category.objects.get(category_name=category_name, category_store=store)
+    except:
+        Category.objects.create(category_name=category_name, category_store=store)
+        return HttpResponseRedirect(reverse("home"))
+    return render(request, 'new_category.html', {'name_taken': True, 'stores': stores})
 
 
 @require_http_methods(["GET", "POST"])
@@ -170,6 +174,7 @@ def generate_list(request):
             i += 1
         p.setFont("Helvetica", 25)
         p.drawString(35, (800-(30*i)), 'Total ' + store.store_name + ' - R$ ' + str(total_price))
+        i += 2
     p.showPage()
     p.save()
     return response

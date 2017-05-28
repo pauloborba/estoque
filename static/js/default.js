@@ -60,13 +60,13 @@ function validate_new_price(){
     Materialize.toast('Preço é obrigatório!', 4000);
 }
 
-function validate_new_item(){
-  item_name = document.getElementById("itemNameInput").value;
-  category = document.getElementById("categoryInput").value;
-  if(isValid(item_name) && isValid(category))
-    document.getElementById("newItemForm").submit();
-  else if(isValid(item_name))
-    Materialize.toast('Escolha uma categoria!', 4000);
+function validate_new_category(){
+  cat_name = document.getElementById("categoryNameInput").value;
+  store = document.getElementById("storeInput").value;
+  if(isValid(cat_name) && isValid(store))
+    document.getElementById("newCategoryForm").submit();
+  else if(isValid(cat_name))
+    Materialize.toast('Escolha uma loja!', 4000);
   else
     Materialize.toast('Nome é obrigatório!', 4000);
 }
