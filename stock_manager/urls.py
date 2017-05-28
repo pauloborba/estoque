@@ -32,6 +32,6 @@ urlpatterns = [
     url(r'^generate_list/$', views.generate_list, name="generate_list"),
     url(r'^logout/$', views.logout_view, name="logout"),
     url(r'^priceList/$', views.price_list, name="price_list"),
-    url(r'^newListByStore/$', views.create_list_by_store, name="listByStore"),
+    url(r'^newListByStore/$', views.create_store_file, name="listByStore"),
 ]
 urlpatterns += staticfiles_urlpatterns()

@@ -17,7 +17,7 @@
             <h4> Selecione uma loja: </h4>
                 <div class="collection col s12" style="padding-left: 0px; padding-right: 0px;">
                     {% if stores is not None %}
-                        <form action="" method="post">
+                    <form action="" method="post">
                             {% csrf_token %}
                             {% for store in stores %}
                                 <p>

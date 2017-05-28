@@ -207,45 +207,39 @@ def generate_pdf(request):
     p.save()
     return response
 
-
-@require_http_methods(["GET", "POST"])
-@login_required
-def create_list_by_store(request):
-    stores = Store.objects.all()
-    cat = Category.objects.all()
-    prices = Price.objects.all()
-    return render(request, 'new_list_store.html', {'stores': stores, 'categories': cat, 'prices': prices})
-
-
 @require_http_methods(["GET", "POST"])
 @login_required
 def create_store_file(request):
+    if request.method == 'GET':
+        stores = Store.objects.all()
+        cat = Category.objects.all()
+        prices = Price.objects.all()
+        return render(request, 'new_list_store.html', {'stores': stores, 'categories': cat, 'prices': prices})
     stores = Store.objects.all()
-    id = request.POST["store"]
+    store_id = request.POST["store"]
     file_name = ''
+    store = Store.objects.get(id=store_id)
+    file_name = store.store_name
+    categories = store.category_set.filter(id=store_id)
     response = HttpResponse(content_type='application/pdf')
-    for store in stores:
-        if store.id == id:
-            file_name = store.store_name
-            categories = store.category_set.filter(category_store=id)
-            response['Content-Disposition'] = "attachment; filename='" + file_name + ".pdf'"
+    response['Content-Disposition'] = "attachment; filename='" + file_name + ".pdf'"
 
-            # Create the PDF object, using the response object as its "file."
-            p = canvas.Canvas(response)
+    # Create the PDF object, using the response object as its "file."
+    p = canvas.Canvas(response)
 
-            i = 0
-            for cat in categories:
-                items = cat.item_set.filter(enough=False)
-                if not items:
-                    continue
-                p.setFont("Helvetica", 25)
-                p.drawString(250, (800 - (30 * i)), cat.category_name)
-                i += 1
-                for item in items:
-                    p.setFont("Helvetica", 15)
-                    p.drawString(200, (800 - (30 * i)), item.item_name)
-                    i += 1
-                i += 1
+    i = 0
+    '''for cat in categories:
+        items = cat.item_set.filter(enough=False)
+        if not items:
+            continue
+        p.setFont("Helvetica", 25)
+        p.drawString(250, (800 - (30 * i)), cat.category_name)
+        i += 1
+        for item in items:
+            p.setFont("Helvetica", 15)
+            p.drawString(200, (800 - (30 * i)), item.item_name)
+            i += 1
+        i += 1'''
 
     # Close the PDF object cleanly, and we're done.
     p.showPage()
