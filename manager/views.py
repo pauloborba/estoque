@@ -211,38 +211,51 @@ def generate_pdf(request):
 @require_http_methods(["GET", "POST"])
 @login_required
 def create_store_file(request):
+    # GET - Abre pagina new_list_store
     if request.method == 'GET':
         stores = Store.objects.all()
-        cat = Category.objects.all()
-        prices = Price.objects.all()
-        return render(request, 'new_list_store.html', {'stores': stores, 'categories': cat, 'prices': prices})
-    stores = Store.objects.all()
+        return render(request, 'new_list_store.html', {'stores': stores})
+    # POST - Cria pdf com base no form submetido
+    prices = Price.objects.all()
     store_id = request.POST["store"]
-    file_name = ''
     store = Store.objects.get(id=store_id)
-    file_name = store.store_name
-    categories = store.category_set.filter(id=store_id)
+    file_name = str(store.store_name).replace(" ", "") # remove espacos em branco
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = "attachment; filename='" + file_name + ".pdf'"
-
-    # Create the PDF object, using the response object as its "file."
+    # Criando PDF
     p = canvas.Canvas(response)
-
+    # cabecalho
+    p.setFont("Courier", 12)
+    p.drawImage("static/favicon.ico", 30, 800)
+    p.drawString(50, 804, "Stock Manager")
+    # Titulo
+    p.setFont("Helvetica", 30)
+    p.drawString(190, 730, "Lista de compras")
+    # Sub-titulo
+    p.setFont("Helvetica", 20)
+    p.drawString(50, 660, str(store.store_name)+":")
+    # Lista
+    result = 0.0
     i = 0
-    '''for cat in categories:
-        items = cat.item_set.filter(enough=False)
-        if not items:
-            continue
-        p.setFont("Helvetica", 25)
-        p.drawString(250, (800 - (30 * i)), cat.category_name)
+    categories = store.category_set.filter()
+    for cat in categories:
+        p.setFont("Helvetica", 18)
+        p.drawString(100, (630 - (30 * i)), cat.category_name)
         i += 1
-        for item in items:
-            p.setFont("Helvetica", 15)
-            p.drawString(200, (800 - (30 * i)), item.item_name)
-            i += 1
-        i += 1'''
-
-    # Close the PDF object cleanly, and we're done.
+        prices = cat.price_set.filter()
+        for price in prices:
+            # Se nao ha a quantidade minina
+            if(price.price_product.qty < price.price_product.min_qty):
+                p.setFont("Helvetica", 16)
+                p.drawString(150, (630 - (30 * i)), price.price_product.item_name)
+                len_item = len(str(price.price_product.item_name))
+                # calcuta o preco total
+                result += price.cost_product
+                p.drawString(150 + (8*len_item), (630 - (30 * i)), " - R$ "+str(price.cost_product))
+                i += 1
+    p.setFont("Helvetica", 18)
+    p.drawString(100, (630 - (30 * i)), "Total: R$ "+str(result))
+    # Finalizando pdf
     p.showPage()
     p.save()
     return response
