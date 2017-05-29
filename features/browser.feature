@@ -1,4 +1,4 @@
-Feature: Demonstrate how to test Django with behave & mechanize
+Feature: Demonstrate gui test
 
   Scenario: Logging in to our new Django site
 

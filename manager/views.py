@@ -223,12 +223,11 @@ def create_store_file(request):
         stores = Store.objects.all()
         return render(request, 'new_list_store.html', {'stores': stores})
     # POST - Cria pdf com base no form submetido
-    prices = Price.objects.all()
     store_id = request.POST["store"]
     store = Store.objects.get(id=store_id)
-    file_name = str(store.store_name).replace(" ", "") # remove espacos em branco
+    file_name = str(store.store_name).replace(" ", "")  # remove espacos em branco
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = "attachment; filename='" + file_name + ".pdf'"
+    response['Content-Disposition'] = "attachment; filename=" + file_name + ".pdf"
     # Criando PDF
     p = canvas.Canvas(response)
     # cabecalho
@@ -252,7 +251,7 @@ def create_store_file(request):
         prices = cat.price_set.filter()
         for price in prices:
             # Se nao ha a quantidade minina
-            if(price.price_product.qty < price.price_product.min_qty):
+            if price.price_product.qty < price.price_product.min_qty:
                 p.setFont("Helvetica", 16)
                 p.drawString(150, (630 - (30 * i)), price.price_product.item_name)
                 len_item = len(str(price.price_product.item_name))
