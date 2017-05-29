@@ -10,7 +10,7 @@ class Store (models.Model):
         ordering=['store_name']
 
 class Category(models.Model):
-    category_name = models.CharField(max_length=30, unique=True)
+    category_name = models.CharField(max_length=30)
     category_store = models.ForeignKey(Store)
     
     def __str__(self):

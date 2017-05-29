@@ -61,12 +61,23 @@ function validate_new_price(){
 }
 
 function validate_new_item(){
-  item_name = document.getElementById("itemNameInput").value;
-  category = document.getElementById("categoryInput").value;
-  if(isValid(item_name) && isValid(category))
+  name = document.getElementById("itemNameInput").value;
+  qty = document.getElementById("itemQtyInput").value;
+  min_qty = document.getElementById("itemMinQtyInput").value;
+  if(isValid(name) && isValid(qty.toString()) && isValid(min_qty.toString()))
     document.getElementById("newItemForm").submit();
-  else if(isValid(item_name))
-    Materialize.toast('Escolha uma categoria!', 4000);
+  else
+    Materialize.toast('Preencha todos os campos!', 4000);
+}
+
+
+function validate_new_category(){
+  cat_name = document.getElementById("categoryNameInput").value;
+  store = document.getElementById("storeInput").value;
+  if(isValid(cat_name) && isValid(store))
+    document.getElementById("newCategoryForm").submit();
+  else if(isValid(cat_name))
+    Materialize.toast('Escolha uma loja!', 4000);
   else
     Materialize.toast('Nome é obrigatório!', 4000);
 }
@@ -85,3 +96,4 @@ function hidePanel(id){
   else
     ref.removeAttr('hidden');
 }
+

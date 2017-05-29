@@ -57,14 +57,12 @@ def sign_up(request):
 def new_item(request):
     categories = Category.objects.all()
     if request.method=='GET':
-        return render(request, 'new_item.html', {'name_taken': False, 'categories': categories})
+        return render(request, 'new_item.html', {'name_taken': False})
     item_name = request.POST["name"].capitalize()
-    enough = request.POST["enough"]
-    enough = True if enough=="1" else False
-    category = request.POST["category"]
-    category = Category.objects.get(id=int(category))
+    qty = int(request.POST["qty"])
+    min_qty = int(request.POST["min_qty"])
     try:
-        Item.objects.create(item_name=item_name, enough=enough, category=category)
+        Item.objects.create(item_name=item_name, qty=qty, min_qty=min_qty)
     except IntegrityError:
         return render(request, 'new_item.html', {'name_taken': True, 'categories': categories})
     return HttpResponseRedirect(reverse("home"))
@@ -107,14 +105,18 @@ def edit_item(request):
 @require_http_methods(["GET", "POST"])
 @login_required
 def new_category(request):
+    stores = Store.objects.all()
     if request.method=='GET':
-        return render(request, 'new_category.html', {'name_taken': False})
+        return render(request, 'new_category.html', {'name_taken': False, 'stores': stores})
     category_name = request.POST["name"].capitalize()
+    store = request.POST["store"]
+    store = Store.objects.get(id=store)
     try:
-        Category.objects.create(category_name=category_name)
-    except IntegrityError:
-        return render(request, 'new_category.html', {'name_taken': True})
-    return HttpResponseRedirect(reverse("home"))
+        Category.objects.get(category_name=category_name, category_store=store)
+    except:
+        Category.objects.create(category_name=category_name, category_store=store)
+        return HttpResponseRedirect(reverse("home"))
+    return render(request, 'new_category.html', {'name_taken': True, 'stores': stores})
 
 
 @require_http_methods(["GET", "POST"])
@@ -143,13 +145,16 @@ def generate_list(request):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = "attachment; filename='"+'lista'+".pdf'"
     p = canvas.Canvas(response)
-    i = 0
+    p.drawImage("static/favicon.ico", 30, 800)
+    p.drawString(50, 804, "Stock Manager")
+    i = 2
     stores = request.POST.getlist('store_checkbox')
     stores = Store.objects.filter(id__in=stores)
     for store in stores:
         p.setFont("Helvetica", 25)
         p.drawString(35, (800-(30*i)), store.store_name)
         i += 1
+        total_price = 0
         for cat in store.category_set.all():
             products = Price.objects.filter(price_category=cat)
             if not products:
@@ -161,11 +166,13 @@ def generate_list(request):
                 if prod.price_product.qty < prod.price_product.min_qty:
                     p.setFont("Helvetica", 15)
                     name = prod.price_product.item_name
-                    p.drawString(200, (800-(30*i)), name)
-                    p.drawString(240+(len(name)*5), (800-(30*i)), ' - ')
-                    p.drawString(240+(len(name)*10), (800-(30*i)), str(prod.cost_product))
+                    p.drawString(200, (800-(30*i)), name + ' - R$ ' + str(prod.cost_product))
+                    total_price += prod.cost_product
                     i += 1
             i += 1
+        p.setFont("Helvetica", 25)
+        p.drawString(35, (800-(30*i)), 'Total ' + store.store_name + ' - R$ ' + str(total_price))
+        i += 2
     p.showPage()
     p.save()
     return response

@@ -5,7 +5,6 @@
 {% endblock title %}
 
 {% block body %}
-  {% include 'menu.html' %}
   <h1 class="center"> Bem-vindo </h1>
 
   <div class="row">
@@ -29,7 +28,7 @@
           <p>Cadastre uma loja onde você costuma comprar.</p>
         </div>
         <div class="card-action">
-          <a href="/admin/manager/store/add/">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+          <a href="{% url 'new_store' %}">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
         </div>
       </div>
     </div>
@@ -41,7 +40,7 @@
           <p>Cadastre um item na relação de itens.</p>
         </div>
         <div class="card-action">
-          <a href="/admin/manager/item/add/">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+          <a href="{% url 'new_item' %}">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
         </div>
       </div>
     </div>
@@ -53,7 +52,7 @@
           <p>Cadastre uma categoria em uma loja já criada.</p>
         </div>
         <div class="card-action">
-          <a href="/admin/manager/category/add/">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+          <a href="{% url 'new_category' %}">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
         </div>
       </div>
     </div>

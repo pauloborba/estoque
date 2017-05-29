@@ -23,6 +23,7 @@
     {% endblock %}
   </head>
   <body style="background-color: #f5f5f5;">
+    {% include 'menu.html' %}
     <ul id="slide-out" class="hide-on-med-and-down indigo side-nav fixed">
       <li><div class="userView">
         <p class="whiteText">Você está logado como: <b>{{request.user.username}}</b></p>
