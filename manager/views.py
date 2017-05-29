@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from custom_user.models import customUser
+from django.views.decorators.csrf import csrf_exempt
 from models import Item, Category, Price, Store
 from models import *
 from reportlab.pdfgen import canvas
@@ -29,7 +30,7 @@ def home_login(request):
     return render(request, 'home_login.html', {'error': True})
 
 @require_http_methods(["GET"])
-@login_required
+@login_required()
 def home(request):
     return render(request, 'home.html', {'is_home': True})
 
@@ -61,6 +62,9 @@ def new_item(request):
     item_name = request.POST["name"].capitalize()
     qty = int(request.POST["qty"])
     min_qty = int(request.POST["min_qty"])
+    return create_new_item(request, item_name, qty, min_qty)
+
+def create_new_item(request, item_name, qty, min_qty):
     try:
         Item.objects.create(item_name=item_name, qty=qty, min_qty=min_qty)
     except IntegrityError:
@@ -77,9 +81,13 @@ def new_price(request):
         return render(request, 'new_price.html', {'name_taken': False, 'itens': itens, 'categories': categories})
     cost_product = float(request.POST["price"])
     item = request.POST["item"]
+    print(request.body)
     item = Item.objects.get(id=int(item))
     category = request.POST["category"]
     category = Category.objects.get(id=int(category))
+    return create_new_price(request, cost_product, category, item)
+
+def create_new_price(request, cost_product, category, item):
     try:
         price = Price.objects.get(price_category=category, price_product=item)
     except:
@@ -111,6 +119,11 @@ def new_category(request):
     category_name = request.POST["name"].capitalize()
     store = request.POST["store"]
     store = Store.objects.get(id=store)
+    return create_new_category(request, category_name, store)
+
+
+def create_new_category(request, category_name, store):
+    stores = Store.objects.all()
     try:
         Category.objects.get(category_name=category_name, category_store=store)
     except:
@@ -120,13 +133,17 @@ def new_category(request):
 
 
 @require_http_methods(["GET", "POST"])
-@login_required
+@login_required()
 def new_store(request):
     if request.method == 'GET':
         return render(request, 'new_store.html', {'name_taken': False})
     store_name = request.POST["name"].capitalize()
+    return create_new_store(request, store_name)
+
+
+def create_new_store(request, name):
     try:
-        Store.objects.create(store_name=store_name)
+        Store.objects.create(store_name=name)
     except IntegrityError:
         return render(request, 'new_store.html', {'name_taken': True})
     return HttpResponseRedirect(reverse("home"))
@@ -176,8 +193,6 @@ def generate_list(request):
     p.showPage()
     p.save()
     return response
-
-    
 
 
 @login_required
