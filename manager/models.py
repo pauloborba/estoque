@@ -18,6 +18,7 @@ class Category(models.Model):
 
     class Meta:
         ordering=['category_name']
+        unique_together = ('category_name', 'category_store')
 
 class Residence (models.Model):
     residence_name = models.CharField(max_length=20)
