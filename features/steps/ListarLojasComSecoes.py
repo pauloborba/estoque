@@ -58,11 +58,31 @@ def solicita_criacao_de_lista_para_loja(context, loja):
 
 @then('o arquivo “{file_name}” é enviado')
 def check_arquivo(context, file_name):
-    assert context.response.content == ''  # como teste de uma arquivo e enviado
+    assert context.response.content == ''  # como teste de um arquivo pdf é gerado?
     '''
     file_name = str(file_name).replace(" ", "")
     assert context.response['Content-Disposition'] == "attachment; filename=" + file_name + ".pdf"
     '''
+
+# Controlador Cenario 2
+
+@given('existem no sistema “0” produtos em falta')
+def existem_zero_produtos_em_falta(context):
+    create_item("arroz", 5, 5)
+    create_item("Fuba", 10, 2)
+    create_item("Pão", 6, 4)
+    items = Item.objects.all()
+    missingItem = False
+    for item in items:
+        if item.qty < item.min_qty:
+            missingItem = True
+    assert not missingItem
+
+
+@then('o arquivo “{file_name}” não é enviado')
+def check_not_arquivo(context, file_name):
+    assert context.response.content is ''  # como teste de um arquivo pdf não é gerado?
+
 
 # Funções auxiliares
 
