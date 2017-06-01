@@ -39,21 +39,24 @@ def step_impl(context, prod1, prod2, qtd, min_qtd):
     context.port = getPort(context.base_url)
     create_item(prod1, qtd, min_qtd)
     create_item(prod2, qtd, min_qtd)
-    assert len(Item.objects.all()) == 2
+    assert len(Item.objects.all()) >= 2
 
-@given(u'A loja {store1} esta cadastrada com a sessao {category} e a loja {store2} esta cadastrada')
-def step_impl(context, store1, category, store2):
-    create_store(store1)
-    create_category(category, store1)
-    create_store(store2)
-    assert len(Store.objects.all()) == 2
-    assert len(Category.objects.all()) == 1
+@given(u'A loja {store} esta cadastrada')
+def step_impl(context, store):
+    create_store(store)
+    assert Store.objects.get(store_name=store) != None
+
+@given(u'A loja {store} possui a sessao {category}')
+def step_impl(context, store, category):
+	create_category(category, store)
+	store = Store.objects.get(store_name=store)
+	assert Category.objects.get(category_name=category, category_store=store) != None
 
 @given(u'A loja {store} possui {item1} na sessao {category1} com o preco {cost1} e {item2} na sessao {category2} com o preco {cost2}')
 def step_impl(context, store, item1, category1, cost1, item2, category2, cost2):
     create_price(store, category1, item1, cost1)
     create_price(store, category2, item2, cost2)
-    assert len(Price.objects.all()) == 2
+    assert len(Price.objects.all()) >= 2
 
 @given(u'So ha esses {qtd} itens cadastrados')
 def step_impl(context, qtd):
@@ -72,13 +75,43 @@ def step_impl(context, store):
 @when(u'Eu seleciono a opcao gerar lista')
 def step_impl(context):
 	context.browser.find_by_id('generateList').click()
+	sleep(5) # Esperar o download terminar para continuar
+	# O certo seria fazer um callback mas não sei fazer isso em python ainda e não há tempo
 
 @then(u'Eu recebo um arquivo e vejo escrito {store1} e vejo {item1} e vejo {item2} e nao vejo {store2}')
 def step_impl(context, store1, item1, item2, store2):
-	sleep(5) # Esperar o download terminar para continuar
-	# O certo seria fazer um callback mas não sei fazer isso em python ainda e não há tempo
 	dir_path = os.path.dirname(os.path.realpath(__file__))
 	pdf = PdfFileReader(os.getcwd()+'/lista.pdf')
 	pdf_content = pdf.getPage(0).extractText()
 	assert store1 in pdf_content and item1 in pdf_content and item2 in pdf_content
 	assert not store2 in pdf_content
+	if os.path.isfile(os.getcwd()+'/lista.pdf'): #Remove o arquivo para os proximos passos
+		os.remove(os.getcwd()+'/lista.pdf')
+
+
+@then(u'Eu recebo um arquivo e vejo escrito Total {store} {total_cost}')
+def step_impl(context, store, total_cost):
+	dir_path = os.path.dirname(os.path.realpath(__file__))
+	pdf = PdfFileReader(os.getcwd()+'/lista.pdf')
+	pdf_content = pdf.getPage(0).extractText()
+	total_string = 'Total ' + store + ' - R$ ' + total_cost
+	assert total_string in pdf_content
+	if os.path.isfile(os.getcwd()+'/lista.pdf'): #Remove o arquivo para os proximos passos
+		os.remove(os.getcwd()+'/lista.pdf')
+
+@then(u'A quantidade do item {item} se mantem {qtd}')
+def step_impl(context, item, qtd):
+	item = Item.objects.get(item_name=item)
+	assert int(item.qty) == int(qtd)
+
+@then(u'O preco do item {item} na loja {store} se mantem {cost}')
+def step_impl(context, item, store, cost):
+	item = Item.objects.get(item_name=item)
+	store = Store.objects.get(store_name=store)
+	category = store.category_set.filter()
+	prices = Price.objects.filter(price_product=item)
+	for price in prices:
+		if(price.price_category.category_store==store):
+			new_cost = price.cost_product
+			break
+	assert float(new_cost) == float(cost)

@@ -16,6 +16,11 @@ if os_name == "windows":
 executable_path = {'executable_path':phantomjs_path}
 
 
+def remove_pdfs():
+	files = os.listdir(os.getcwd())
+	for file in files:
+		if os.path.isfile(file) and file.startswith('lista'):
+			os.remove(os.getcwd()+'/'+file)
 
 def before_all(context):
 	if os.path.isfile(os.getcwd()+'/lista.pdf'): #testa se há arquivo no diretório do processo
@@ -28,6 +33,5 @@ def before_all(context):
 	context.browser = Browser('firefox', profile_preferences=prof_settings)
 
 def after_all(context):
-	if os.path.isfile(os.getcwd()+'/lista.pdf'): #testa se há arquivo no diretório do processo
-		os.remove(os.getcwd()+'/lista.pdf') #se houver, remova-o antes de finalizar os testes
+	remove_pdfs()
 	context.browser.quit()
