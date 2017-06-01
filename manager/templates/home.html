@@ -28,7 +28,7 @@
           <p>Cadastre uma loja onde você costuma comprar.</p>
         </div>
         <div class="card-action">
-          <a href="{% url 'new_store' %}">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+          <a href="{% url 'new_store' %}" id="new_store">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@
           <p>Cadastre um item na relação de itens.</p>
         </div>
         <div class="card-action">
-          <a href="{% url 'new_item' %}">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+          <a href="{% url 'new_item' %}" id="new_item">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
           <p>Cadastre uma categoria em uma loja já criada.</p>
         </div>
         <div class="card-action">
-          <a href="{% url 'new_category' %}">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+          <a href="{% url 'new_category' %}" id="new_category">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
         </div>
       </div>
     </div>
@@ -64,7 +64,7 @@
           <p>Associe um preço a um produto em uma loja.</p>
         </div>
         <div class="card-action">
-          <a href="{% url 'new_price' %}">Criar<i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+          <a href="{% url 'new_price' %}" id="new_price">Criar<i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
         </div>
       </div>
     </div>
@@ -76,7 +76,7 @@
           <p>Selecione uma loja e baixe em PDF a lista dessa loja.</p>
         </div>
         <div class="card-action">
-          <a href="{% url 'listByStore' %}">Baixar<i style="position: absolute; top: 13px;" class="material-icons">play_for_work</i></a>
+          <a href="{% url 'listByStore' %}" id="linkListByStore">Baixar<i style="position: absolute; top: 13px;" class="material-icons">play_for_work</i></a>
         </div>
       </div>
     </div>
@@ -88,7 +88,7 @@
           <p>Escolha as lojas que você deseja incluir na lista.</p>
         </div>
         <div class="card-action">
-          <a href="{% url 'generate_list' %}">Baixar<i style="position: absolute; top: 13px;" class="material-icons">play_for_work</i></a>
+          <a href="{% url 'generate_list' %}" id="linkGenerateList">Baixar<i style="position: absolute; top: 13px;" class="material-icons">play_for_work</i></a>
         </div>
       </div>
     </div>
