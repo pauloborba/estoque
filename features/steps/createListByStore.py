@@ -259,7 +259,7 @@ def verify_item_in_set(item,items):
 
 
 def gui_create_price(context, price, cat, store, item):
-    context.browser.find_by_id('new_price').click()
+    context.browser.find_by_id('criarPreco').click()
     price_val = context.browser.find_by_id("priceInput")
     price_val.fill(price)
     select_item = getItemByName(item)
