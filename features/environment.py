@@ -31,6 +31,7 @@ def before_all(context):
 			"browser.helperApps.neverAsk.saveToDisk": "application/pdf",\
 			"pdfjs.disabled": True}
 	context.browser = Browser('firefox', profile_preferences=prof_settings)
+	#context.browser = Browser('phantomjs', **executable_path)
 
 def after_all(context):
 	remove_pdfs()
