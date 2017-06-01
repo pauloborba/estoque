@@ -29,12 +29,10 @@ def home_login(request):
     return render(request, 'home_login.html', {'error': True})
 
 @require_http_methods(["GET"])
-@login_required
 def home(request):
     return render(request, 'home.html', {'is_home': True})
 
 @require_http_methods(["GET"])
-@login_required
 def help(request):
     return render(request, 'help.html')
 
@@ -53,7 +51,6 @@ def sign_up(request):
     return HttpResponseRedirect(reverse("home_login"))
 
 @require_http_methods(["GET", "POST"])
-@login_required
 def new_item(request):
     categories = Category.objects.all()
     if request.method=='GET':
@@ -69,7 +66,6 @@ def new_item(request):
 
 
 @require_http_methods(["GET", "POST"])
-@login_required
 def new_price(request):
     categories = Category.objects.all()
     itens = Item.objects.all()
@@ -92,7 +88,6 @@ def new_price(request):
 
 
 @require_http_methods(["POST"])
-@login_required
 def edit_item(request):
     item_id = request.POST["id"];
     item_to_edit = Item.objects.get(id=item_id)
@@ -103,7 +98,6 @@ def edit_item(request):
     return HttpResponse(request.user.points);
 
 @require_http_methods(["GET", "POST"])
-@login_required
 def new_category(request):
     stores = Store.objects.all()
     if request.method=='GET':
@@ -120,7 +114,6 @@ def new_category(request):
 
 
 @require_http_methods(["GET", "POST"])
-@login_required
 def new_store(request):
     if request.method == 'GET':
         return render(request, 'new_store.html', {'name_taken': False})
@@ -131,56 +124,57 @@ def new_store(request):
         return render(request, 'new_store.html', {'name_taken': True})
     return HttpResponseRedirect(reverse("home"))
 
-@login_required
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("home_login"))
 
-@login_required
-@require_http_methods(["GET", "POST"])
-def generate_list(request):
-    if request.method == 'GET':
-        stores = Store.objects.all()
-        return render(request, 'chooseStores.html', {'stores': stores})
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = "attachment; filename='"+'lista'+".pdf'"
-    p = canvas.Canvas(response)
-    p.drawImage("static/favicon.ico", 30, 800)
-    p.drawString(50, 804, "Stock Manager")
+def write_pdf(pdf_ref, stores):
+    pdf_ref.drawImage("static/favicon.ico", 30, 800)
+    pdf_ref.drawString(50, 804, "Stock Manager")
     i = 2
-    stores = request.POST.getlist('store_checkbox')
     stores = Store.objects.filter(id__in=stores)
     for store in stores:
-        p.setFont("Helvetica", 25)
-        p.drawString(35, (800-(30*i)), store.store_name)
+        pdf_ref.setFont("Helvetica", 25)
+        pdf_ref.drawString(35, (800-(30*i)), store.store_name)
         i += 1
         total_price = 0
         for cat in store.category_set.all():
             products = Price.objects.filter(price_category=cat)
             if not products:
                 continue
-            p.setFont("Helvetica", 20)
-            p.drawString(120, (800-(30*i)), cat.category_name)
+            pdf_ref.setFont("Helvetica", 20)
+            pdf_ref.drawString(120, (800-(30*i)), cat.category_name)
             i += 1
             for prod in products:
                 if prod.price_product.qty < prod.price_product.min_qty:
-                    p.setFont("Helvetica", 15)
+                    pdf_ref.setFont("Helvetica", 15)
                     name = prod.price_product.item_name
-                    p.drawString(200, (800-(30*i)), name + ' - R$ ' + str(prod.cost_product))
+                    pdf_ref.drawString(200, (800-(30*i)), name + ' - R$ ' + str(prod.cost_product))
                     total_price += prod.cost_product
                     i += 1
             i += 1
-        p.setFont("Helvetica", 25)
-        p.drawString(35, (800-(30*i)), 'Total ' + store.store_name + ' - R$ ' + str(total_price))
+        pdf_ref.setFont("Helvetica", 25)
+        pdf_ref.drawString(35, (800-(30*i)), 'Total ' + store.store_name + ' - R$ ' + str(total_price))
         i += 2
-    p.showPage()
-    p.save()
+    pdf_ref.showPage()
+    pdf_ref.save()
+
+
+@require_http_methods(["GET", "POST"])
+def generate_list(request):
+    if request.method == 'GET':
+        stores = Store.objects.all()
+        return render(request, 'chooseStores.html', {'stores': stores})
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = "attachment; filename=lista.pdf"
+    p = canvas.Canvas(response)
+    stores = request.POST.getlist('store_checkbox')
+    write_pdf(p, stores)
     return response
 
     
 
 
-@login_required
 def generate_pdf(request):
     today_date = datetime.datetime.today()
     day = ("0"+str(today_date.day)) if today_date.day < 10 else str(today_date.day)
@@ -216,7 +210,6 @@ def generate_pdf(request):
     return response
 
 @require_http_methods(["GET", "POST"])
-@login_required
 def create_store_file(request):
     # GET - Abre pagina new_list_store
     if request.method == 'GET':
