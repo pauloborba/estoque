@@ -15,9 +15,12 @@
 Um servidor local que atende em localhost:8000 deve estar sendo rodado em sua maquina.
 
 ## Como rodar os testes do projeto via bash:
-1. Rode o comando `python manage.py behave`
-
-Uma janela do firefox vai abrir e rodar os testes
+1. Em [features/environment.py](/features/environment.py) escolha o browser que irá executar os testes de GUI
+2. Baixe o *path* do browser escolhido:
+    1. [Firefox](https://github.com/mozilla/geckodriver/releases)
+    2. [Chrome](https://chromedriver.storage.googleapis.com/index.html?path=2.29/)
+3. Copie o arquivo baixado para 'usr/local/bin'
+4. Rode o comando `python manage.py behave`
 
 Referências:
 

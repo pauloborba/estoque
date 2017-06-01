@@ -9,7 +9,7 @@
 	Relação Produto-Loja-Preço
 </h3>
 	<div class="row">
-		<div class="collection col s12" style="padding-left: 0px; padding-right: 0px;">
+		<div class="collection col s12" id="listaElementos" style="padding-left: 0px; padding-right: 0px;">
 			{% for price in prices %}
 				<a href="/admin/manager/price/{{price.id}}/change/" class="collection-item">
 					{{price.price_product.item_name}} - {{price.price_category.category_store.store_name}} - {{price.cost_product}} - {{" R$" }}
