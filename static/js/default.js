@@ -57,7 +57,7 @@ function validate_new_price(){
   else if(!isValid(category.toString()))
     Materialize.toast('Escolha uma categoria!', 4000)
   else
-    Materialize.toast('Preço é obrigatório!', 4000);
+      Materialize.toast('Preço é obrigatório!', 4000);
 }
 
 function validate_new_item(){
@@ -90,7 +90,7 @@ function check_no_stores(){
 }
 
 function hidePanel(id){
-  let ref = $('#'+id);
+  ref = $('#'+id);
   if(ref.attr('hidden') === undefined || ref.attr === false)
     ref.attr('hidden', 'hidden');
   else

@@ -30,12 +30,10 @@ def home_login(request):
     return render(request, 'home_login.html', {'error': True})
 
 @require_http_methods(["GET"])
-@login_required()
 def home(request):
     return render(request, 'home.html', {'is_home': True})
 
 @require_http_methods(["GET"])
-@login_required
 def help(request):
     return render(request, 'help.html')
 
@@ -54,9 +52,7 @@ def sign_up(request):
     return HttpResponseRedirect(reverse("home_login"))
 
 @require_http_methods(["GET", "POST"])
-@login_required
 def new_item(request):
-    categories = Category.objects.all()
     if request.method=='GET':
         return render(request, 'new_item.html', {'name_taken': False})
     item_name = request.POST["name"].capitalize()
@@ -65,6 +61,7 @@ def new_item(request):
     return create_new_item(request, item_name, qty, min_qty)
 
 def create_new_item(request, item_name, qty, min_qty):
+
     try:
         Item.objects.create(item_name=item_name, qty=qty, min_qty=min_qty)
     except IntegrityError:
@@ -73,19 +70,29 @@ def create_new_item(request, item_name, qty, min_qty):
 
 
 @require_http_methods(["GET", "POST"])
-@login_required
 def new_price(request):
     categories = Category.objects.all()
     itens = Item.objects.all()
     if request.method == 'GET':
         return render(request, 'new_price.html', {'name_taken': False, 'itens': itens, 'categories': categories})
-    cost_product = float(request.POST["price"])
-    item = request.POST["item"]
-    print(request.body)
-    item = Item.objects.get(id=int(item))
-    category = request.POST["category"]
-    category = Category.objects.get(id=int(category))
+    cost_product = get_cost(request, "price")
+    item = get_item(request, "item")
+    category = get_category("category")
     return create_new_price(request, cost_product, category, item)
+
+def get_cost(request, cost):
+    cost_product = float(request.POST[cost])
+    return cost_product
+
+def get_item(request, item):
+    it = request.POST[item]
+    it = Item.objects.get(id=int(it))
+    return it
+
+def get_category(request, category):
+    cat = request.POST[category]
+    cat = Category.objects.get(id=int(cat))
+    return cat
 
 def create_new_price(request, cost_product, category, item):
     try:
@@ -100,7 +107,6 @@ def create_new_price(request, cost_product, category, item):
 
 
 @require_http_methods(["POST"])
-@login_required
 def edit_item(request):
     item_id = request.POST["id"];
     item_to_edit = Item.objects.get(id=item_id)
@@ -111,7 +117,6 @@ def edit_item(request):
     return HttpResponse(request.user.points);
 
 @require_http_methods(["GET", "POST"])
-@login_required
 def new_category(request):
     stores = Store.objects.all()
     if request.method=='GET':
@@ -133,7 +138,6 @@ def create_new_category(request, category_name, store):
 
 
 @require_http_methods(["GET", "POST"])
-@login_required()
 def new_store(request):
     if request.method == 'GET':
         return render(request, 'new_store.html', {'name_taken': False})
@@ -148,12 +152,12 @@ def create_new_store(request, name):
         return render(request, 'new_store.html', {'name_taken': True})
     return HttpResponseRedirect(reverse("home"))
 
-@login_required
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("home_login"))
 
-@login_required
+
 @require_http_methods(["GET", "POST"])
 def generate_list(request):
     if request.method == 'GET':
@@ -195,7 +199,6 @@ def generate_list(request):
     return response
 
 
-@login_required
 def generate_pdf(request):
     today_date = datetime.datetime.today()
     day = ("0"+str(today_date.day)) if today_date.day < 10 else str(today_date.day)
@@ -231,7 +234,7 @@ def generate_pdf(request):
     return response
 
 @require_http_methods(["GET", "POST"])
-@login_required
+
 def create_store_file(request):
     # GET - Abre pagina new_list_store
     if request.method == 'GET':
