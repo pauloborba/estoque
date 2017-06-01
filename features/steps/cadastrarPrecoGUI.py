@@ -123,12 +123,13 @@ def lista_nao_alterada(context):
 @given(u'o campo de cadastramento de preco esta vazio')
 def verifica_campo_vazio(context):
     campo = driver.find_element_by_id("priceInput")
+    campo.send_keys(123)
+    campo.clear()
     assert campo.text == ""
 
 @when(u'eu tento cadastrar preco para o item "{item}" na loja "{loja}"')
 def tentar_cadastrar_preco(context, item, loja):
-    cadastrarBotao = driver.find_element_by_id("newPriceForm")
-    cadastrarBotao.click()
+    driver.find_element_by_tag_name("button").click()
 
 
 @then(u'eu permaneco na pagina de cadastramento de precos')
@@ -138,3 +139,7 @@ def verifica_mesma_pagina(context):
 @then(u'eu vejo uma mensagem informando que falta inserir um preco')
 def vejo_mensagem(context):
     pass
+    #driver.find_element_by_class_name("toast")
+    itens = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located(
+        (By.CLASS_NAME, 'toast')))
+    assert (len(itens) > 0)

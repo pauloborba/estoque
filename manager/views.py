@@ -77,7 +77,7 @@ def new_price(request):
         return render(request, 'new_price.html', {'name_taken': False, 'itens': itens, 'categories': categories})
     cost_product = get_cost(request, "price")
     item = get_item(request, "item")
-    category = get_category("category")
+    category = get_category(request, "category")
     return create_new_price(request, cost_product, category, item)
 
 def get_cost(request, cost):
