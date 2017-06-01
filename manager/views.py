@@ -61,7 +61,7 @@ def new_item(request):
     return create_new_item(request, item_name, qty, min_qty)
 
 def create_new_item(request, item_name, qty, min_qty):
-
+    category = Category.objects.all()
     try:
         Item.objects.create(item_name=item_name, qty=qty, min_qty=min_qty)
     except IntegrityError:
@@ -199,6 +199,7 @@ def generate_list(request):
     return response
 
 
+'''
 def generate_pdf(request):
     today_date = datetime.datetime.today()
     day = ("0"+str(today_date.day)) if today_date.day < 10 else str(today_date.day)
@@ -232,18 +233,39 @@ def generate_pdf(request):
     p.showPage()
     p.save()
     return response
+'''
 
 @require_http_methods(["GET", "POST"])
 
 def create_store_file(request):
+    stores = Store.objects.all()
     # GET - Abre pagina new_list_store
     if request.method == 'GET':
-        stores = Store.objects.all()
-        return render(request, 'new_list_store.html', {'stores': stores})
+        return render(request, 'new_list_store.html', {'stores': stores, 'list_creatable': True})
     # POST - Cria pdf com base no form submetido
     store_id = request.POST["store"]
     store = Store.objects.get(id=store_id)
-    file_name = str(store.store_name).replace(" ", "")  # remove espacos em branco
+    file_name = unicode(store.store_name).replace(" ", "")  # remove espacos em branco
+    if store_have_items(store):
+        return generate_pdf_by_store(store,file_name)
+    else:
+        return render(request, 'new_list_store.html', {'stores': stores, 'list_creatable': False})
+
+
+def store_have_items(store):
+    category = store.category_set.filter()
+    for cat in category:
+        prices = cat.price_set.filter()
+        if prices is None:
+            return False
+        else:
+            for price in prices:
+                if price.price_product.qty < price.price_product.min_qty:
+                    return True
+    return False
+
+
+def generate_pdf_by_store(store, file_name):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = "attachment; filename=" + file_name + ".pdf"
     # Criando PDF
@@ -257,7 +279,7 @@ def create_store_file(request):
     p.drawString(190, 730, "Lista de compras")
     # Sub-titulo
     p.setFont("Helvetica", 20)
-    p.drawString(50, 660, str(store.store_name)+":")
+    p.drawString(50, 660, unicode(store.store_name)+":")
     # Lista
     result = 0.0
     i = 0
