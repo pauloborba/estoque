@@ -4,6 +4,11 @@
   <title> Novo Item </title>
 {% endblock title %}
 
+
+<!--
+
+-->
+
 {% block body %}
 <h1 class="center"> Novo Item </h1>
 <form id="newItemForm" action="" method="post">
@@ -15,24 +20,17 @@
         <label for="name">Nome do item</label>
       </div>
       <div class="input-field col s12 m6">
-        <i class="large material-icons prefix">equalizer</i>
-        <select name="enough">
-          <option value="1">Suficiente</option>
-          <option value="0">Comprar</option>
-        </select>
-        <label>Quantidade</label>
+        <i class="material-icons prefix">equalizer</i>
+        <input id="itemQtyInput" name="qty" type="number" class="validate">
+        <label for="qty">Quantidade</label>
       </div>
     </div>
     <div class="row">
-        <div class="input-field col s12 m6">
-          <i class="large material-icons prefix">toc</i>
-          <select id="categoryInput" name="category">
-            {% for category in categories %}
-              <option value="{{category.id}}">{{category.category_name}}</option>
-            {% endfor %}
-          </select>
-          <label>Categoria</label>
-        </div>
+      <div class="input-field col s12 m6">
+        <i class="material-icons prefix">equalizer</i>
+        <input id="itemMinQtyInput" name="min_qty" type="number" class="validate">
+        <label for="min_qty">Quantidade Mínima</label>
+      </div>
     </div>
     {% if name_taken %}
       <div class="row">

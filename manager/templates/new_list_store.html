@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load qtyMap %}
+{% block title %}
+    <title> Nova lista </title>
+{% endblock title %}
+
+{% block body %}
+    {% include 'menu.html' %}
+    <header class="row">
+        <div class="col s12 center">
+            <h3><strong> Criação de lista para loja específica </strong></h3>
+        </div>
+    </header>
+    <article>
+        <div class="col s12">
+            <div class="row">
+            <h4> Selecione uma loja: </h4>
+                <div class="collection col s12" style="padding-left: 0px; padding-right: 0px;">
+                    {% if stores != None %}
+                    <form action="" method="post">
+                            {% csrf_token %}
+                            {% for store in stores %}
+                                <p>
+                                    {% if forloop.counter == 1 %}
+                                        <input name="store" type="radio" id="store{{ forloop.counter }}" value="{{ store.id }}" checked/>
+                                        <label for="store{{ forloop.counter }}">{{ forloop.counter }} - {{ store.store_name }}</label>
+                                    {% else %}
+                                        <input name="store" type="radio" id="store{{ forloop.counter }}" value="{{ store.id }}"/>
+                                        <label for="store{{ forloop.counter }}">{{ forloop.counter }} - {{ store.store_name }}</label>
+                                    {% endif %}
+                                </p>
+                            {% endfor %}
+                            <p>
+                                <button class="btn green accent-3 black-text" type="submit" name="btn-submit" id="btn-submit">
+                                    <i class="rotate180 material-icons right">publish</i>
+                                    Baixar
+                                </button>
+                                {% if not list_creatable %}
+                                    <span class="orange-text">Lista não foi criada. Não existem itens em falta para essa loja</span>
+                                {% endif %}
+                            </p>
+                        </form>
+                    {% else %}
+                        <h5>Nenhuma Loja cadastrada.</h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </article>
+{% endblock body %}
