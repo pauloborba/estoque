@@ -15,7 +15,8 @@ if os_name == "windows":
 executable_path = {'executable_path':phantomjs_path}
 
 def before_all(context):
-    context.browser = Browser('phantomjs', **executable_path)
+    # context.browser = Browser('phantomjs', **executable_path)
+    context.browser = Browser('firefox')
 
 def after_all(context):
     context.browser.quit()
