@@ -11,7 +11,7 @@ from models import Item, Category, Price, Store
 from models import *
 from reportlab.pdfgen import canvas
 import datetime
-
+import datetime
 
 
 @require_http_methods(["GET","POST"])
@@ -41,6 +41,10 @@ def price_list(request):
     prices = Price.objects.all()
     return render(request, 'price_list.html', {'prices': prices})
 
+def price_history(request):
+    history = History.objects.all()
+    return render(request, 'price_history.html', {'history': history})
+
 @require_http_methods(["GET", "POST"])
 def sign_up(request):
     if request.method=='GET':
@@ -61,7 +65,7 @@ def new_item(request):
     return create_new_item(request, item_name, qty, min_qty)
 
 def create_new_item(request, item_name, qty, min_qty):
-    category = Category.objects.all()
+    categories = Category.objects.all()
     try:
         Item.objects.create(item_name=item_name, qty=qty, min_qty=min_qty)
     except IntegrityError:
@@ -100,9 +104,12 @@ def create_new_price(request, cost_product, category, item):
     except:
         Price.objects.create(cost_product=cost_product, price_category=category, price_product=item)
         x = Price.objects.all()
+        price = Price.objects.get(price_category=category, price_product=item)
+        History.objects.create(history_price=price, history_date=datetime.datetime.now())
         return render(request, 'price_list.html', {'name_taken': False, 'prices': x})
     price.cost_product = cost_product;
     price.save()
+    History.objects.create(history_price=price, history_date=datetime.datetime.now())
     return HttpResponseRedirect(reverse("price_list"))
 
 

@@ -8,4 +8,5 @@ admin.site.register(customUser)
 admin.site.register(Store)
 admin.site.register(Price)
 admin.site.register(Residence)
+admin.site.register(History)
 # Register your models here.

@@ -55,7 +55,7 @@ function validate_new_price() {
     else if (!isValid(item.toString()))
         Materialize.toast('Escolha uma Item!', 5000)
     else if (!isValid(category.toString()))
-        Materialize.toast('Escolha uma categoria!', 5000)
+        Materialize.toast('Escolha uma Loja!', 5000)
     else
         Materialize.toast('Preço é obrigatório!', 5000)
 }

@@ -47,3 +47,10 @@ class Price (models.Model):
 
     def __str__(self):
         return str(self.price_product) + ' - '+str(self.price_category.category_store.store_name)
+
+class History (models.Model):
+    history_price = models.ForeignKey(Price)
+    history_date = models.DateTimeField()
+
+    def __str__(self):
+        return str(self.history_date.date()) + ' - ' +str(self.history_price.price_product.item_name) +' - ' + str(self.history_price.cost_product)
