@@ -105,11 +105,11 @@ def create_new_price(request, cost_product, category, item):
         Price.objects.create(cost_product=cost_product, price_category=category, price_product=item)
         x = Price.objects.all()
         price = Price.objects.get(price_category=category, price_product=item)
-        History.objects.create(history_price=price, history_date=datetime.datetime.now())
+        History.objects.create(history_price=price, history_date=datetime.datetime.now(), history_value=cost_product)
         return render(request, 'price_list.html', {'name_taken': False, 'prices': x})
     price.cost_product = cost_product;
     price.save()
-    History.objects.create(history_price=price, history_date=datetime.datetime.now())
+    History.objects.create(history_price=price, history_date=datetime.datetime.now(), history_value=cost_product)
     return HttpResponseRedirect(reverse("price_list"))
 
 

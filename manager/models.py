@@ -51,6 +51,6 @@ class Price (models.Model):
 class History (models.Model):
     history_price = models.ForeignKey(Price)
     history_date = models.DateTimeField()
-
+    history_value = models.FloatField(default=0.0)
     def __str__(self):
         return str(self.history_date.date()) + ' - ' +str(self.history_price.price_product.item_name) +' - ' + str(self.history_price.cost_product)
