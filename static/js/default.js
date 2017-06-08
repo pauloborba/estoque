@@ -53,11 +53,11 @@ function validate_new_price() {
     if (isValid(item.toString()) && isValid(category.toString()) && isValid(price.toString()))
         document.getElementById("newPriceForm").submit();
     else if (!isValid(item.toString()))
-        Materialize.toast('Escolha uma Item!', 5000)
+        Materialize.toast('Escolha uma Item!', 15000)
     else if (!isValid(category.toString()))
-        Materialize.toast('Escolha uma Loja!', 5000)
+        Materialize.toast('Escolha uma Loja!', 15000)
     else
-        Materialize.toast('Preço é obrigatório!', 5000)
+        Materialize.toast('Preço é obrigatório!', 15000)
 }
 
 function validate_new_item() {

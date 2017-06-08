@@ -61,51 +61,35 @@ def cadastrar_secao_loja(context, secao, loja):
 
 @given(u'eu estou na pagina de cadastramento de precos')
 def pagina_cadastrar_preco(context):
-    #driver.get("http://localhost:8000/home/")
-    context.browser.visit('http://localhost:' + context.port + reverse('home'))
-    #assert driver.current_url == "http://localhost:8000/home/"
-    assert context.browser.url == ('http://localhost:' + context.port + reverse('home'))
-    #link = driver.find_element_by_id("criarPreco")
+    context.browser.visit(context.base_url+'/home')
+    assert context.browser.url == (context.base_url+'/home/')
     link = context.browser.find_by_id('criarPreco')
     link.click()
-    #assert driver.current_url == "http://localhost:8000/newPrice/"
-    assert context.browser.url == ('http://localhost:' + context.port + reverse('new_price'))
+    assert context.browser.url == (context.base_url+'/newPrice/')
 
 
 
-@given(u'eu seleciono o item "{item}" na lista de itens cadastrados')
+@when(u'eu seleciono o item "{item}" na lista de itens cadastrados')
 def item_esta_cadastrado(context, item):
-    #driver.find_element_by_class_name("select-dropdown").click()
-    context.browser.find_by_css('select-dropdown').first().click()
-    #spans = driver.find_elements_by_tag_name("span")
-    spans = context.browser.find_by_tag('span')
-    for s in spans:
-        if (s.text == item):
-            s.click()
+    dropdown = context.browser.find_by_xpath("//select[@id='itemInput']")
+    for option in dropdown.find_by_tag('option'):
+        if option.text == item:
+            option.click()
+            break
 
 
-@given(u'eu seleciono a secao "{secao}" da loja "{loja}" na lista de secoes')
+
+@when(u'eu seleciono a secao "{secao}" da loja "{loja}" na lista de secoes')
 def secao_esta_cadastrada(context, secao, loja):
     views.create_new_store(None, loja)
     store = Store.objects.get(store_name=loja)
     views.create_new_category(None, secao, store)
     category = Category.objects.get(category_name=secao, category_store=store)
-    #driver.find_element_by_class_name("select-dropdown2").click()
-    context.browser.find_by_css('select-dropdown2').first().click()
-    time.sleep(2)
-    #spans = driver.find_elements_by_tag_name("span")
-    spans = context.browser.find_by_tag('span')
-    for s in spans:
-        if (s.text == category.category_store.store_name + " - " + category.category_name):
-            s.click()
-
-
-@given(u'eu preencho o campo preco com valor "{valor}"')
-def campo_preenchido(context, valor):
-    #priceField = driver.find_element_by_id("priceInput")
-    priceField = context.browser.find_by_id('priceInput')
-    priceField.send_keys(valor)
-    before = Price.objects.all()
+    dropdown = context.browser.find_by_xpath("//select[@id='itemInput']")
+    for option in dropdown.find_by_tag('option'):
+        if option.text == category.category_store.store_name + " - " + category.category_name:
+            option.click()
+            break
 
 
 @given(u'o item "{item}" na loja "{loja}" ainda nao possui um preco')
@@ -115,22 +99,25 @@ def preco_nao_cadastrado(context, item, loja):
     assert Price.objects.filter(price_product=itemObject, price_category__category_store=lojaObject).count() == 0
 
 
+@when(u'eu preencho o campo preco com valor "{valor}"')
+def campo_preenchido(context, valor):
+    priceField = context.browser.find_by_id('priceInput')
+    priceField.fill(valor)
+    before = Price.objects.all()
+
+
 @when(u'eu tento cancelar o cadastramento do item "{item}" com o valor "{preco}" na loja "{loja}"')
 def cancelar_cadastramento_preco(context, item, preco, loja):
-    c = Price.objects.all().count()
-    #driver.find_element_by_id("cancelButton").click()
     context.browser.find_by_id('cancelButton').click()
 
 
 @then(u'eu estou na pagina de precos cadastrados')
 def estou_pagina_precos_cadastrados(context):
-    #assert driver.current_url == "http://localhost:8000/priceList/"
-    assert context.browser.url == ('http://localhost:' + context.port + reverse('price_list'))
+    assert context.browser.url == (context.base_url+'/priceList/')
 
 
 @then(u'a lista de precos nao foi alterada')
 def lista_nao_alterada(context):
-    #lista = driver.find_element_by_id("listaElementos")
     lista = context.browser.find_by_id('listaElementos')
     after = Price.objects.all()
     assert len(before) == len(after)
@@ -139,26 +126,22 @@ def lista_nao_alterada(context):
 
 @given(u'o campo de cadastramento de preco esta vazio')
 def verifica_campo_vazio(context):
-    #campo = driver.find_element_by_id("priceInput")
     campo = context.browser.find_by_id('priceInput')
-    campo.send_keys(123)
-    campo.clear()
+    campo.fill(123)
+    campo.fill("")
     assert campo.text == ""
 
 @when(u'eu tento cadastrar preco para o item "{item}" na loja "{loja}"')
 def tentar_cadastrar_preco(context, item, loja):
-    #driver.find_element_by_tag_name("button").click()
     context.browser.find_by_tag('button').click()
 
 
 @then(u'eu permaneco na pagina de cadastramento de precos')
 def verifica_mesma_pagina(context):
-    #assert driver.current_url == "http://localhost:8000/newPrice/"
-    assert context.browser.url == ('http://localhost:' + context.port + reverse('price_list'))
+    assert context.browser.url == (context.base_url+'/newPrice/')
 
 @then(u'eu vejo uma mensagem informando que falta inserir um preco')
 def vejo_mensagem(context):
-    #driver.find_element_by_class_name("toast")
-    itens = WebDriverWait(context.browser, 10).until(EC.presence_of_all_elements_located(
+    itens = WebDriverWait(context.browser.driver, 20).until(EC.presence_of_all_elements_located(
         (By.CLASS_NAME, 'toast')))
     assert (len(itens) > 0)
