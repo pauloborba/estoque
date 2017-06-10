@@ -22,3 +22,12 @@ Feature: Cadastrar preco
     When eu tento cadastrar preco para o item "Treloso" na loja "Extra"
     Then eu permaneco na pagina de cadastramento de precos
     Then eu vejo uma mensagem informando que falta inserir um preco
+
+    Scenario: Visualizar lista de historico
+    Given o item "Bolo" esta cadastrado no sistema
+    Given a secao "Massas" esta cadastrada para a loja "Preco Legal"
+    Given o preço "25.00" esta cadastrado no sistema para o produto "Bolo" na secao "Massas" da loja "Preco Legal"
+    Given eu estou na pagina principal
+    When eu seleciono a opcao de ver historico
+    Then eu estou na pagina de historicos
+    Then eu vejo o produto "Bolo" no historico de precos

@@ -5,14 +5,14 @@ from django.db import models
 class Store (models.Model):
     store_name = models.CharField(max_length=30, unique=True)
     def __str__(self):
-        return self.store_name
+        return self.store_name.encode('ascii', 'ignore')
     class Meta:
         ordering=['store_name']
 
 class Category(models.Model):
     category_name = models.CharField(max_length=30)
     category_store = models.ForeignKey(Store)
-    
+
     def __str__(self):
         return self.category_name.encode('ascii', 'ignore') + " - " +str(self.category_store.store_name)
 

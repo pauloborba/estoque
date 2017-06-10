@@ -27,8 +27,8 @@ def cadastrar_secao(context, secao, loja):
     assert Category.objects.get(category_name=secao, category_store=lojaObject) != None
 
 
-@given(u'o produto "{item}" esta cadastrado no sistema com o preço "{preco}" na secao "{secao}" da loja "{loja}"')
-def cadastrar_item_com_secao(context, item, preco, secao, loja):
+@given(u'o preço "{preco}" esta cadastrado no sistema para o produto "{item}" na secao "{secao}" da loja "{loja}"')
+def cadastrar_item_com_secao(context, preco, item, secao, loja):
     views.create_new_item(None, item_name=item, qty=float(10), min_qty=float(0))
     itemObject = Item.objects.get(item_name=item)
     assert itemObject != None
@@ -57,6 +57,13 @@ def verificar_preco_nao_existente(context, item, secao, loja):
     assert (Price.objects.filter(price_product=itemObject, price_category=secaoObject).count() == 0)
 
 
+@given(u'nao existe outros precos cadastrados alem dos precos para os items "{item1}" e "{item2}"')
+def verificar_outros_precos(context, item1, item2):
+    assert Price.objects.filter(price_product__item_name=item1).count() == 1
+    assert Price.objects.filter(price_product__item_name=item2).count() == 1
+    assert Price.objects.all().count() == 2
+
+
 @when(u'eu tento cadastrar o preco "{preco}" do produto "{item}" na secao "{secao}" da loja "{loja}"')
 def tentar_cadastrar_preco(context, preco, item, secao, loja):
     itemObject = Item.objects.get(item_name=item)
@@ -67,6 +74,48 @@ def tentar_cadastrar_preco(context, preco, item, secao, loja):
     views.create_new_price(None, preco, secaoObject, itemObject)
     assert Price.objects.get(cost_product=preco, price_category=secaoObject, price_product=itemObject)
 
+
+@then(u'o sistema verifica que o preco para o produto "{item}" na secao "{secao}" da loja "{loja}" e o que possui mais historicos')
+def verificar_mais_historico(context, item, secao, loja):
+    i = 0
+    itemObject = Item.objects.get(item_name=item)
+    lojaObject = Store.objects.get(store_name=loja)
+    secaoObject = Category.objects.get(category_name=secao, category_store=lojaObject)
+    priceObject = Price.objects.get(price_product=itemObject, price_category=secaoObject)
+    priceAux = None
+    for p in Price.objects.all():
+        if(p.history_set.count()>i):
+            i = p.history_set.count()
+            priceAux = p
+    assert priceAux == priceObject
+
+@when(u'eu sobrescrevo o preco para o produto "{item}" na secao "{secao}" da loja "{loja}" para "{preco}"')
+def sobrescrevo_preco(context, item, secao, loja, preco):
+    itemObject = Item.objects.get(item_name=item)
+    lojaObject = Store.objects.get(store_name=loja)
+    secaoObject = Category.objects.get(category_name=secao, category_store=lojaObject)
+    precoObject = Price.objects.get(price_product=itemObject, price_category=secaoObject)
+    views.create_new_price(None, preco, secaoObject, itemObject)
+    assert Price.objects.get(cost_product=preco, price_category=secaoObject, price_product=itemObject)
+
+@then(u'o sistema cadastra corretamente o preco "{preco}" para o produto "{item}" na secao "{secao}" da loja "{loja}"')
+def cadastrar_preco_nao_existente(context, preco, item, secao, loja):
+    itemObject = Item.objects.get(item_name=item)
+    assert itemObject != None
+    secaoObject = Category.objects.get(category_name=secao, category_store__store_name=loja)
+    assert secaoObject != None
+    views.create_new_price(None, preco, secaoObject, itemObject)
+    precoObject = Price.objects.get(cost_product=preco, price_product=itemObject, price_category=secaoObject)
+    assert precoObject != None
+    assert (float(precoObject.cost_product) == float(preco))
+
+@then(u'e criado um historico de precos para o produto "{item}" na secao "{secao}" da loja "{loja}"')
+def criar_historico_para_um_produto(context, item, secao, loja):
+    itemObject = Item.objects.get(item_name=item)
+    storeObject = Store.objects.get(store_name=loja)
+    categoryObject = Category.objects.get(category_name=secao, category_store=storeObject)
+    preco = Price.objects.get(price_product=itemObject, price_category=categoryObject)
+    assert preco.history_set.all().count() >0
 
 @then(u'o sistema sobrescreve o preco do produto "{item}" na loja "{loja}" para o valor "{preco}"')
 def sobrescrever_preco(context, item, loja, preco):
@@ -84,13 +133,3 @@ def sobrescrever_preco(context, item, loja, preco):
     assert (priceObject.price_category.category_store == lojaObject)
 
 
-@then(u'o sistema cadastra corretamente o preco "{preco}" para o produto "{item}" na secao "{secao}" da loja "{loja}"')
-def cadastrar_preco_nao_existente(context, preco, item, secao, loja):
-    itemObject = Item.objects.get(item_name=item)
-    assert itemObject != None
-    secaoObject = Category.objects.get(category_name=secao, category_store__store_name=loja)
-    assert secaoObject != None
-    views.create_new_price(None, preco, secaoObject, itemObject)
-    precoObject = Price.objects.get(cost_product=preco, price_product=itemObject, price_category=secaoObject)
-    assert precoObject != None
-    assert (float(precoObject.cost_product) == float(preco))

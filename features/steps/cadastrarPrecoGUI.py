@@ -68,6 +68,15 @@ def pagina_cadastrar_preco(context):
     assert context.browser.url == (context.base_url+'/newPrice/')
 
 
+@given(u'eu estou na pagina principal')
+def pagina_principal(context):
+    context.browser.visit(context.base_url+'/home')
+    assert context.browser.url == (context.base_url+'/home/')
+
+@when(u'eu seleciono a opcao de ver historico')
+def ver_historico(context):
+    link = context.browser.find_by_id('history')
+    link.click()
 
 @when(u'eu seleciono o item "{item}" na lista de itens cadastrados')
 def item_esta_cadastrado(context, item):
@@ -131,6 +140,7 @@ def verifica_campo_vazio(context):
     campo.fill("")
     assert campo.text == ""
 
+
 @when(u'eu tento cadastrar preco para o item "{item}" na loja "{loja}"')
 def tentar_cadastrar_preco(context, item, loja):
     context.browser.find_by_tag('button').click()
@@ -140,8 +150,20 @@ def tentar_cadastrar_preco(context, item, loja):
 def verifica_mesma_pagina(context):
     assert context.browser.url == (context.base_url+'/newPrice/')
 
+
 @then(u'eu vejo uma mensagem informando que falta inserir um preco')
 def vejo_mensagem(context):
     itens = WebDriverWait(context.browser.driver, 20).until(EC.presence_of_all_elements_located(
         (By.CLASS_NAME, 'toast')))
     assert (len(itens) > 0)
+
+
+@then(u'eu estou na pagina de historicos')
+def pagina_historico(context):
+    assert context.browser.url == (context.base_url + '/priceHistory/')
+
+
+@then(u'eu vejo o produto "{item}" no historico de precos')
+def vejo_item_historico(context, item):
+    assert context.browser.is_text_present(item)
+
