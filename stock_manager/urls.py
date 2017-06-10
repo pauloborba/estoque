@@ -21,13 +21,18 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     url(r'^admin/', admin.site.urls, name="admPage"),
     url(r'^$', views.home_login, name="home_login"),
+    url(r'^help/$', views.help, name="help"),
     url(r'^signUp_old/$', views.sign_up, name="sign_up"),
-    url(r'^newItem_old/$', views.new_item, name="new_item"),
+    url(r'^newPrice/$', views.new_price, name="new_price"),
+    url(r'^newItem/$', views.new_item, name="new_item"),
     url(r'^editItem/$', views.edit_item, name="new_editItemById"),
     url(r'^newCategory_old/$', views.new_category, name="new_category"),
+    url(r'^newStore/$', views.new_store, name="new_store"),
     url(r'^home/$', views.home, name="home"),
-    url(r'^genPdf/$', views.generate_pdf, name="pdfGen"),
+    url(r'^generate_list/$', views.generate_list, name="generate_list"),
     url(r'^logout/$', views.logout_view, name="logout"),
-
+    url(r'^priceList/$', views.price_list, name="price_list"),
+    url(r'^priceHistory/$', views.price_history, name="price_history"),
+    url(r'^newListByStore/$', views.create_store_file, name="listByStore"),
 ]
 urlpatterns += staticfiles_urlpatterns()
