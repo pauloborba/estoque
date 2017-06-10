@@ -31,3 +31,10 @@ Feature: Cadastrar preco
     When eu seleciono a opcao de ver historico
     Then eu estou na pagina de historicos
     Then eu vejo o produto "Bolo" no historico de precos
+
+    Scenario: Nenhum historico cadastrado
+    Given nenhum produto, loja ou preco esta cadastrado no sistema
+    Given eu estou na pagina principal
+    When eu seleciono a opcao de ver historico
+    Then eu estou na pagina de historicos
+    Then a lista de historico esta vazia

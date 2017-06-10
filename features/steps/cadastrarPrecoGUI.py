@@ -67,6 +67,12 @@ def pagina_cadastrar_preco(context):
     link.click()
     assert context.browser.url == (context.base_url+'/newPrice/')
 
+@given(u'nenhum produto, loja ou preco esta cadastrado no sistema')
+def verifica_nada_cadastrado(context):
+    assert Item.objects.count() == 0
+    assert Store.objects.count() == 0
+    assert Category.objects.count() == 0
+    assert Price.objects.count() == 0
 
 @given(u'eu estou na pagina principal')
 def pagina_principal(context):
@@ -146,6 +152,11 @@ def tentar_cadastrar_preco(context, item, loja):
     context.browser.find_by_tag('button').click()
 
 
+@then(u'a lista de historico esta vazia')
+def lista_de_historico_vazia(context):
+    assert not context.browser.is_text_present("R$")
+
+
 @then(u'eu permaneco na pagina de cadastramento de precos')
 def verifica_mesma_pagina(context):
     assert context.browser.url == (context.base_url+'/newPrice/')
@@ -166,4 +177,3 @@ def pagina_historico(context):
 @then(u'eu vejo o produto "{item}" no historico de precos')
 def vejo_item_historico(context, item):
     assert context.browser.is_text_present(item)
-
