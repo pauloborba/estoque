@@ -17,64 +17,64 @@ from time import sleep
 
 @given('a loja "{loja}" está registrada no sistema')
 def registra_loja(context, loja):
+    delete_all_instaces()
     create_store(loja)
-    loja_created = getStoreByName(loja)
+    loja_created = get_store_by_name(loja)
     assert loja_created is not None
+    assert loja_created.store_name == loja
 
 
 @given('as seções "{secao1}" e "{secao2}" foram cadastradas em "{loja}"')
 def registra_duas_secoes(context, secao1, secao2, loja):
-    create_category(secao1, loja)
-    create_category(secao2, loja)
-    category_created_1 = getCategoryByName(secao1, loja)
-    category_created_2 = getCategoryByName(secao2, loja)
-    assert category_created_1 is not None
-    assert category_created_2 is not None
+    registra_secao_and_check(context, secao1, loja)
+    registra_secao_and_check(context, secao2, loja)
 
 
 @given('os produtos "{item1}" e "{item2}" estão cadastrados no estoque')
 def registra_dois_itens(context, item1, item2):
-    create_item(item1, 5, 5)
-    item_created_1 = getItemByName(item1)
-    create_item(item2, 5, 5)
-    item_created_2 = getItemByName(item2)
-    assert item_created_1 is not None
-    assert item_created_2 is not None
+    registra_item_and_check(context, item1)
+    registra_item_and_check(context, item2)
 
 
 @given('os produtos "{item1}" e "{item2}" estão em falta no estoque')
 def marca_dois_itens_em_falta(context, item1, item2):
-    updateItemQty(item1, 0, 5)
-    updateItemQty(item2, 0, 5)
+    update_item_and_check(unicode(item1), 0, 5)
+    update_item_and_check(unicode(item2), 0, 5)
 
 
 @given('o produto "{item}" está em falta no estoque')
 def marca_item_em_falta(context, item):
-    updateItemQty(item, 0, 5)
+    update_item(item, 0, 5)
+    item_created = get_item_by_name(item)
+    assert item_created.qty < item_created.min_qty
 
 
-@when('eu solicito a criação da lista exclusiva para "{loja}"')
-def solicita_criacao_de_lista_para_loja(context, loja):
-    c = Client()
-    response = c.post('/newListByStore/', {'store': loja})
-    context.response = response
-    sleep(5)
+@given('para a seção "{cat}" em "{store}" foi associado o produto "{item}" com preço "{price}"')
+def cria_preco(context, cat, store, item, price):
+    registra_preco_and_check(context, cat, store, item, price)
+
+
+@when('eu solicito a criação da lista exclusiva para "{store}"')
+def solicita_criacao_de_lista_para_loja(context, store):
+    go_pag_new_list_by_store(context)
+    seleciona_store(context, store)
+    baixa_store(context)
+    sleep(3)
 
 
 @then('o arquivo "{file_name}" é enviado')
 def check_arquivo(context, file_name):
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    pdf = PdfFileReader(os.getcwd()+'/lista.pdf')
+    pdf = PdfFileReader(os.getcwd() + '/' + file_name)
     context.pdf_content = pdf.getPage(0).extractText()
     assert context.pdf_content is not None
 
 
 @then('vejo no arquivo que a seção "{category}" não aparece')
 def step_impl(context, category):
-    assert not (category in context.pdf_content)
+    assert not(category in context.pdf_content)
 
 
-@then(u'a seção "{cat}" aparece com os itens "{item1}" "{price1}" e "{item2}" "{price2}"')
+@then('a seção "{cat}" aparece com os itens "{item1}" "{price1}" e "{item2}" "{price2}"')
 def step_impl(context, cat, item1, price1, item2, price2):
     assert cat in context.pdf_content
     assert item1 in context.pdf_content
@@ -86,8 +86,7 @@ def step_impl(context, cat, item1, price1, item2, price2):
 @then('no final do arquivo aparece o total de "{price_tot}"')
 def step_impl(context, price_tot):
     assert price_tot in context.pdf_content
-    if os.path.isfile(os.getcwd() + '/lista.pdf'):
-        os.remove(os.getcwd() + '/lista.pdf')
+    clean_files()
 
 
 # Controlador Cenario 2
@@ -107,47 +106,40 @@ def existem_zero_produtos_em_falta(context):
 
 @then('o arquivo "{file_name}" não é enviado')
 def check_not_arquivo(context, file_name):
-    assert context.response.get('Content-Disposition') is None
+    assert not os.path.isfile(os.getcwd() + '/' + file_name)
 
 
 # GUI Cenario 1
 
-
-server_name = "http://localhost:8000"
-
-
 @given('a loja "{store}" tem 3 seções cadastradas: "{cat1}", "{cat2}" e "{cat3}", nessa ordem')
 def step_impl(context, store, cat1, cat2, cat3):
-    create_category(cat1, store)
-    cat_inst_1 = getCategoryByName(cat1, store)
-    create_category(cat2, store)
-    cat_inst_2 = getCategoryByName(cat2, store)
-    create_category(cat3, store)
-    cat_inst_3 = getCategoryByName(cat3, store)
-    assert cat_inst_1 is not None
-    assert cat_inst_2 is not None
-    assert cat_inst_3 is not None
+    registra_secao_and_check(context, cat1, store)
+    registra_secao_and_check(context, cat2, store)
+    registra_secao_and_check(context, cat3, store)
 
 
-@given('para a seção "{cat}" em "{store}" foi associado o produto "{item}" com preço "{price}"')
-def step_impl(context, cat, store, item, price):
-    create_price(price, cat, store, item)
-    price_created = getPrice(price, cat, store, item)
-    assert price_created is not None
+@given('para a seção "{cat}" em "{store}" foram associados os seguintes produtos: "{item1}" com preço "{price1}" e "{item2}" com preço "{price2}"')
+def step_cria_dois_precos(context, cat, store, item1, price1, item2, price2):
+    registra_preco_and_check(context, cat, store, item1, price1)
+    registra_preco_and_check(context, cat, store, item2, price2)
 
 
 @given('vejo na página "generate_list" que os seguintes produtos "{item1}", "{item2}" e "{item3}" estão em falta no estoque')
 def step_impl(context, item1, item2, item3):
-    sleep(5)
-    sigin(context)
-    sleep(5)
+    open_home(context)
     # Seleciona no menu e vai para /generate_list/
     context.browser.find_by_id('linkGenerateList').click()
-    items = context.browser.find_by_css('.red-text')
-    assert items is not None
-    assert verify_item_in_set(item1,items)
-    assert verify_item_in_set(item2,items)
-    assert verify_item_in_set(item3,items)
+    sleep(2)
+    assert str(context.browser.url).endswith('/generate_list/')
+    linesItems = context.browser.find_by_css('.red-text')
+    assert linesItems is not None
+    items = []
+    for i in linesItems:
+        items.append(i.text.split(' ', 1)[0])
+    assert item1 in items
+    assert item2 in items
+    assert item3 in items
+    sleep(2)
 
 
 @then('vejo uma lista com os itens "{item1}" "{price1}", "{item2}" "{price2}" e "{item3}" "{price3}"')
@@ -176,47 +168,49 @@ def step_impl(context, cat1, cat2):
 
 @given('observo na página "generate_list" que não há itens em falta')
 def go_pag_generate_list(context):
-    # abre a pagina inicial e loga
-    sleep(5)
-    sigin(context)
-    sleep(5)
+    # abre a pagina inicial
+    open_home(context)
     # Seleciona no menu e vai para /generate_list/
     context.browser.find_by_id('linkGenerateList').click()
-    sleep(5)
+    sleep(3)
+    assert str(context.browser.url).endswith('/generate_list/')
     # Veriificar se não há objetos marcados em vermelho, ou seja, item em falta
     assert context.browser.is_element_not_present_by_css('.red-text')
 
 
 @given('estou na página "newListByStore"')
 def go_pag_new_list_by_store(context):
+    open_home(context)
     # Seleciona no menu e vai para /newListByStore/
     context.browser.find_by_id('linkListByStore').click()
-    sleep(5)
-    assert context.browser.status_code.is_success()
+    sleep(3)
+    assert str(context.browser.url).endswith("/newListByStore/")
 
 
 @when('seleciono a loja "{store}" na lista de lojas')
-def step_impl(context, store):
-    select_store = getStoreByName(store)
+def seleciona_store(context, store):
+    select_store = get_store_by_name(store)
     # Seleciona input type:radio por 'name' e 'value'
     context.browser.choose('store', select_store.id)
+    sleep(1)
 
 
 @when('seleciono a opção "baixar"')
-def step_impl(context):
+def baixa_store(context):
     btn = context.browser.find_by_name('btn-submit').first  # context.browser.find_by_name('action').first
     btn.click()
-    sleep(5)
+    sleep(3)
 
 
 @then('vejo uma mensagem informando "{message}"')
 def step_impl(context, message):
     assert context.browser.is_text_present(message)
+    clean_files()
 
 
 # Funções auxiliares
 
-def getStoreByName(store):
+def get_store_by_name(store):
     instace_loja = Store.objects.get(store_name=store)
     return instace_loja
 
@@ -226,16 +220,16 @@ def create_store(store):
 
 
 def create_category(category, store):
-    Category.objects.create(category_name=category, category_store=getStoreByName(store))
+    Category.objects.create(category_name=category, category_store=get_store_by_name(store))
 
 
-def getCategoryByName(category, store):
-    instace_store = getStoreByName(store)
+def get_category_by_name(category, store):
+    instace_store = get_store_by_name(store)
     instace_category = instace_store.category_set.filter(category_name=category)
     return instace_category[0]
 
 
-def getItemByName(item):
+def get_item_by_name(item):
     instace_item = Item.objects.get(item_name=item)
     return instace_item
 
@@ -244,60 +238,49 @@ def create_item(item, quant, min_quant):
     Item.objects.create(item_name=item, qty=quant, min_qty=min_quant)
 
 
-def updateItemQty(item, quant, min_quant):
-    instace_item = getItemByName(item)
+def update_item(item, quant, min_quant):
+    instace_item = get_item_by_name(item)
     instace_item.qty = quant
     instace_item.min_qty = min_quant
+    instace_item.save()
+
+
+def update_item_and_check(name, quant, min_quant):
+    update_item(name, quant, min_quant)
+    item_created = get_item_by_name(name)
+    assert item_created.qty < item_created.min_qty
 
 
 def create_price(price, category, store, item):
     Price.objects.create(
         cost_product=float(price),
-        price_category=getCategoryByName(category, store),
-        price_product=getItemByName(item)
+        price_category=get_category_by_name(category, store),
+        price_product=get_item_by_name(item)
     )
 
 
-def getPrice(price, category, store, item):
+def get_price(price, category, store, item):
     instace_price = Price.objects.get(
         cost_product=float(price),
-        price_category=getCategoryByName(category, store),
-        price_product=getItemByName(item)
+        price_category=get_category_by_name(category, store),
+        price_product=get_item_by_name(item)
     )
     return instace_price
 
 
-def sigin(context):
-    # antes do teste rode via comand line
-    # python manage.py createsuperuser
-    # Username: test
-    # Email address: test@mail.com
-    # Password: adminadm
-    # Password(again): adminadm
-    # por fim, certifique-se de ver a mensagem: "Superuser created successfully."
-    context.browser.visit(server_name + '/')
-    user = context.browser.find_by_id("usernameInput")
-    user.fill('test')
-    pwd = context.browser.find_by_id("pwdInput")
-    pwd.fill('adminadm')
-    # Autentica e vai para /Home/
-    context.browser.find_by_tag('button').first.click()
-
-
-def verify_item_in_set(item,items):
-    values = []
-    for i in items:
-        values.append(i.text)
-    return item in values
+def open_home(context):
+    context.browser.visit(context.base_url + '/home/')
+    sleep(2) # aguarda reencamiar para home
+    assert str(context.browser.url).endswith("/home/")
 
 
 def gui_create_price(context, price, cat, store, item):
     context.browser.find_by_id('criarPreco').click()
     price_val = context.browser.find_by_id("priceInput")
     price_val.fill(price)
-    select_item = getItemByName(item)
+    select_item = get_item_by_name(item)
     context.browser.choose('item', select_item.id)
-    select_cat = getCategoryByName(cat, store)
+    select_cat = get_category_by_name(cat, store)
     context.browser.choose('category', select_cat.id)
     # Cadastra e vai para /Home/
     context.browser.find_by_tag('button').first.click()
@@ -315,9 +298,55 @@ def gui_create_item(context, item, qty, min):
 
 
 def gui_create_category(context, cat, store):
-    select_store = getStoreByName(store)
+    select_store = get_store_by_name(store)
     context.browser.find_by_id('new_category').click()
     name = context.browser.find_by_id("categoryNameInput")
     name.fill(cat)
     context.browser.choose('store', select_store.id)
     context.browser.find_by_tag('button').first.click()
+
+
+def registra_secao_and_check(context, secao, loja):
+    create_category(secao, loja)
+    category_created = get_category_by_name(secao, loja)
+    assert category_created is not None
+    assert category_created.category_name == secao
+
+
+def registra_item_and_check(context, item):
+    item = unicode(item)
+    create_item(item, 5, 5)
+    item_created_1 = get_item_by_name(item)
+    assert item_created_1 is not None
+    assert item_created_1.item_name == item
+
+
+def registra_preco_and_check(context, cat, store, item, price):
+    create_price(price, cat, store, item)
+    price_created = get_price(price, cat, store, item)
+    assert price_created is not None
+    assert price_created.cost_product == float(price)
+
+
+def delete_all_stores():
+    Store.objects.all().delete()
+
+def delete_all_items():
+    Item.objects.all().delete()
+
+
+def delete_all_instaces():
+    delete_all_stores()
+    delete_all_items()
+
+
+def clean_files():
+    if os.path.isfile(os.getcwd() + '/ListaLoja.pdf'):  # Remove o arquivo para os proximos passos
+        os.remove(os.getcwd() + '/ListaLoja.pdf')
+
+'''
+Descartados:
+    
+
+    
+'''

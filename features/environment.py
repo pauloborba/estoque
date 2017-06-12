@@ -19,20 +19,21 @@ executable_path = {'executable_path': phantomjs_path}
 def remove_pdfs():
     files = os.listdir(os.getcwd())
     for f in files:
-        if os.path.isfile(f) and f.startswith('lista'):
+        if os.path.isfile(f) and f.startswith('ListaLoja'):
             os.remove(os.getcwd() + '/' + f)
 
 
 def before_all(context):
-    if os.path.isfile(os.getcwd() + '/lista.pdf'):
-        os.remove(os.getcwd() + '/lista.pdf')
+    if os.path.isfile(os.getcwd() + '/ListaLoja.pdf'):
+        os.remove(os.getcwd() + '/ListaLoja.pdf')
     prof_settings = {"browser.download.folderList": 2,
                      "browser.download.manager.showWhenStarting": False,
                      "browser.download.dir": os.getcwd(),
                      "browser.helperApps.neverAsk.saveToDisk": "application/pdf",
                      "pdfjs.disabled": True}
     context.browser = Browser('firefox', profile_preferences=prof_settings)
-    # context.browser = Browser('phantomjs', **executable_path)
+    #context.browser = Browser('firefox')
+    #context.browser = Browser('phantomjs', **executable_path)
 
 
 def after_all(context):
