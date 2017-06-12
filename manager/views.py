@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.db import IntegrityError
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from custom_user.models import customUser
@@ -208,7 +207,8 @@ def create_store_file(request):
     # POST - Cria pdf com base no form submetido
     store_id = request.POST["store"]
     store = Store.objects.get(id=store_id)
-    file_name = unicode(store.store_name).replace(" ", "")  # remove espacos em branco
+    file_name = "ListaLoja"
+    #file_name = unicode(store.store_name).replace(" ", "")  # remove espacos em branco
     if store_have_items(store):
         return generate_pdf_by_store(store,file_name)
     else:

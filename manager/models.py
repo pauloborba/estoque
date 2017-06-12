@@ -5,13 +5,13 @@ from django.db import models
 class Store (models.Model):
     store_name = models.CharField(max_length=30, unique=True)
     def __str__(self):
-        return self.store_name
+        return self.store_name.encode('ascii', 'ignore')
     class Meta:
         ordering=['store_name']
 
 class Category(models.Model):
     category_name = models.CharField(max_length=30)
-    category_store = models.ForeignKey(Store)
+    category_store = models.ForeignKey(Store, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.category_name.encode('ascii', 'ignore') + " - " +str(self.category_store.store_name)
@@ -40,8 +40,8 @@ class Item(models.Model):
 
 class Price (models.Model):
     cost_product = models.FloatField(default=0.0)
-    price_category = models.ForeignKey(Category) #se trocar para categoria, todos os supermercados devem ter categoria
-    price_product = models.ForeignKey(Item) #lembrar de mudar Item para Produto
+    price_category = models.ForeignKey(Category, on_delete=models.CASCADE) #se trocar para categoria, todos os supermercados devem ter categoria
+    price_product = models.ForeignKey(Item, on_delete=models.CASCADE) #lembrar de mudar Item para Produto
     class Meta:
         unique_together = ('price_category', 'price_product')
 
