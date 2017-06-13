@@ -1,0 +1,328 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-06-12 22:41-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: manager/templates/base.html:30
+msgid "Você está logado como:"
+msgstr "You're logged as:"
+
+#: manager/templates/base.html:34
+msgid "Ranking"
+msgstr "Ranking"
+
+#: manager/templates/base.html:39
+msgid "Nome"
+msgstr "Name"
+
+#: manager/templates/base.html:40
+msgid "Pontuação"
+msgstr "Score"
+
+#: manager/templates/base.html:53 manager/templates/base.html:56
+msgid "Você"
+msgstr "You"
+
+#: manager/templates/chooseStores.html:4
+msgid "Escolher Lojas"
+msgstr "Choose stores"
+
+#: manager/templates/chooseStores.html:9
+msgid "Escolha as lojas a serem visitadas:"
+msgstr "Choose stores to be visiteds"
+
+#: manager/templates/chooseStores.html:20 manager/templates/new_price.html:32
+msgid "Produto"
+msgstr "Product"
+
+#: manager/templates/chooseStores.html:21
+msgid "Categoria"
+msgstr "Category"
+
+#: manager/templates/chooseStores.html:22
+msgid "Preço"
+msgstr "Price"
+
+#: manager/templates/chooseStores.html:44
+msgid "Gerar lista"
+msgstr "Generate list"
+
+#: manager/templates/help.html:4
+msgid "Lista de produtos"
+msgstr "Product list"
+
+#: manager/templates/help.html:8
+msgid "Como usar o sistema"
+msgstr "How to use the system"
+
+#: manager/templates/help.html:10
+msgid "Crie uma loja,"
+msgstr "Create a store"
+
+#: manager/templates/help.html:11
+msgid "Para cada loja, crie categorias,"
+msgstr "For each store, create categories"
+
+#: manager/templates/help.html:12
+msgid "Crie produtos,"
+msgstr "Create products"
+
+#: manager/templates/help.html:13
+msgid "Associe um produto a um preço em uma loja,"
+msgstr "Link a product to a store with a price"
+
+#: manager/templates/help.html:14
+msgid "Imprima em PDF informações da loja(s) desejada(s)."
+msgstr "Download PDF with information about the stores selecteds"
+
+#: manager/templates/home.html:5
+msgid "Home"
+msgstr "Home"
+
+#: manager/templates/home.html:9
+msgid "Bem-vindo"
+msgstr "Welcome"
+
+#: manager/templates/home.html:16
+msgid "Como usar o sistema?"
+msgstr "How to use the system?"
+
+#: manager/templates/home.html:17
+msgid "Navegue pelas instruções de como usar o sistema."
+msgstr "Navigate through system's instructions"
+
+#: manager/templates/home.html:20
+msgid "Ajuda"
+msgstr "Help"
+
+#: manager/templates/home.html:28
+msgid "Criar uma loja."
+msgstr "Create a store"
+
+#: manager/templates/home.html:29
+msgid "Cadastre uma loja onde você costuma comprar."
+msgstr "Create a store where you often visit"
+
+#: manager/templates/home.html:32 manager/templates/home.html:44
+#: manager/templates/home.html:56 manager/templates/home.html:68
+msgid "Criar"
+msgstr "Create"
+
+#: manager/templates/home.html:40
+msgid "Criar um item."
+msgstr "Create an item"
+
+#: manager/templates/home.html:41
+msgid "Cadastre um item na relação de itens."
+msgstr "Create an item in itens list"
+
+#: manager/templates/home.html:52
+msgid "Criar uma categoria."
+msgstr "Create a category"
+
+#: manager/templates/home.html:53
+msgid "Cadastre uma categoria em uma loja já criada."
+msgstr "Create a category in a store already created"
+
+#: manager/templates/home.html:64
+msgid "Criar um preço."
+msgstr "Create a price"
+
+#: manager/templates/home.html:65
+msgid "Associe um preço a um produto em uma loja."
+msgstr "Link a price to a product in a store"
+
+#: manager/templates/home.html:76
+msgid "Baixar lista de loja."
+msgstr "Download a store list"
+
+#: manager/templates/home.html:77
+msgid "Selecione uma loja e baixe em PDF a lista dessa loja."
+msgstr "Choose a store and download its PDF"
+
+#: manager/templates/home.html:80 manager/templates/home.html:92
+#: manager/templates/new_list_store.html:41
+msgid "Baixar"
+msgstr "Download"
+
+#: manager/templates/home.html:88
+msgid "Baixar lista de várias lojas."
+msgstr "Download list of several stores"
+
+#: manager/templates/home.html:89
+msgid "Escolha as lojas que você deseja incluir na lista."
+msgstr "Choose stores you want in the list"
+
+#: manager/templates/home_login.html:19 manager/templates/home_login.html:28
+msgid "Stock Manager"
+msgstr "Stock Manager"
+
+#: manager/templates/home_login.html:29
+msgid "Por favor, se autentique"
+msgstr "Please, log in"
+
+#: manager/templates/home_login.html:45
+msgid "Seu nome"
+msgstr "Your name"
+
+#: manager/templates/home_login.html:52
+msgid "Sua senha"
+msgstr "Your password"
+
+#: manager/templates/home_login.html:56
+msgid "Nome ou senha incorreto(s)"
+msgstr "Name or password incorrect"
+
+#: manager/templates/home_login.html:62
+msgid "Entrar"
+msgstr "Login"
+
+#: manager/templates/menu.html:9
+msgid "Lista de Preços"
+msgstr "Price List"
+
+#: manager/templates/menu.html:14
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: manager/templates/menu.html:19
+msgid "Log Out"
+msgstr "Log out"
+
+#: manager/templates/new_category.html:8
+msgid "Nova Categoria"
+msgstr "Create a category"
+
+#: manager/templates/new_category.html:14
+msgid "Campo obrigatório"
+msgstr "Required Field"
+
+#: manager/templates/new_category.html:15
+msgid "Nome da categoria"
+msgstr "Store name"
+
+#: manager/templates/new_category.html:26 manager/templates/new_price.html:42
+msgid "Loja"
+msgstr "Store"
+
+#: manager/templates/new_category.html:32 manager/templates/new_item.html:39
+#: manager/templates/new_store.html:23
+msgid "Nome já em uso."
+msgstr "Name taken"
+
+#: manager/templates/new_category.html:40
+msgid "Criar categoria"
+msgstr "Create a category"
+
+#: manager/templates/new_category.html:43 manager/templates/new_item.html:49
+#: manager/templates/new_price.html:58 manager/templates/new_store.html:34
+msgid "Cancelar"
+msgstr "Cancel"
+
+#: manager/templates/new_item.html:5 manager/templates/new_item.html:14
+msgid "Novo Item"
+msgstr "New Item"
+
+#: manager/templates/new_item.html:21
+msgid "Nome do item"
+msgstr "Store name"
+
+#: manager/templates/new_item.html:26
+msgid "Quantidade"
+msgstr "Quantity"
+
+#: manager/templates/new_item.html:33
+msgid "Quantidade Mínima"
+msgstr "Minimum Quantity"
+
+#: manager/templates/new_item.html:46
+msgid "Criar item"
+msgstr "Create an item"
+
+#: manager/templates/new_list_store.html:5
+msgid "Nova lista"
+msgstr "Generate list"
+
+#: manager/templates/new_list_store.html:12
+msgid "Criação de lista para loja específica"
+msgstr "Generate list for one store"
+
+#: manager/templates/new_list_store.html:18
+msgid "Selecione uma loja:"
+msgstr "Create a store"
+
+#: manager/templates/new_list_store.html:37
+msgid "Visualizar"
+msgstr "Visualize"
+
+#: manager/templates/new_list_store.html:46
+msgid "Nenhuma Loja cadastrada."
+msgstr "No stores created."
+
+#: manager/templates/new_price.html:14
+msgid "Novo Preço"
+msgstr "Price"
+
+#: manager/templates/new_price.html:21
+msgid "Preço do produto"
+msgstr "Create products"
+
+#: manager/templates/new_price.html:48
+msgid "Preço já cadastrado!"
+msgstr "Price already registered!"
+
+#: manager/templates/new_price.html:55
+msgid "Cadastrar preço"
+msgstr "Create a price"
+
+#: manager/templates/new_store.html:5 manager/templates/new_store.html:9
+msgid "Nova Loja"
+msgstr "Store"
+
+#: manager/templates/new_store.html:16
+msgid "Nome da loja"
+msgstr "Store name"
+
+#: manager/templates/new_store.html:31
+#, fuzzy
+msgid "Criar loja"
+msgstr "Create a store"
+
+#: manager/templates/price_list.html:4
+msgid "Preços Cadastrados"
+msgstr "Registered Prices"
+
+#: manager/templates/price_list.html:10
+msgid "Relação Produto-Loja-Preço"
+msgstr "Relation Product-Store-Price"
+
+#: manager/templates/sign_up.html:5 manager/templates/sign_up.html:9
+msgid "Cadastrar"
+msgstr "Create"
+
+#: manager/templates/sign_up.html:17
+msgid "Login"
+msgstr "Login"
+
+#: manager/templates/sign_up.html:22
+msgid "E-mail"
+msgstr "E-mail"
+
+#: manager/templates/sign_up.html:29
+#, fuzzy
+msgid "Senha"
+msgstr "Your password"

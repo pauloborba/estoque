@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block title %}
   <title> Nova Categoria </title>
 {% endblock title %}
 
 {% block body %}
-<h1 class="center"> Nova Categoria </h1>
+<h1 class="center">  {% trans "Nova Categoria" %} </h1>
 <form id="newCategoryForm" class="col s12" action="" method="post">
   {% csrf_token %}
     <div class="row">
       <div class="input-field col s12">
         <i class="material-icons prefix">description</i>
-        <input oninput="setCustomValidity('')" required oninvalid="this.setCustomValidity('Campo obrigatório')" id="categoryNameInput" name="name" type="text" class="validate">
-        <label for="name">Nome da categoria</label>
+        <input oninput="setCustomValidity('')" required oninvalid="this.setCustomValidity(' {% trans "Campo obrigatório" %} ')" id="categoryNameInput" name="name" type="text" class="validate">
+        <label for="name"> {% trans "Nome da categoria" %} </label>
       </div>
     </div>
 
@@ -23,13 +23,13 @@
           <option value="{{store.id}}">{{ store.store_name }}</option>
         {% endfor %}
       </select>
-      <label>Loja</label>
+      <label> {% trans "Loja" %} </label>
     </div>
 
     {% if name_taken %}
       <div class="row">
         <div class="col s4">
-          <p class="center red-text">Nome já em uso.</p>
+          <p class="center red-text"> {% trans "Nome já em uso." %} </p>
         </div>
       </div>
     {% endif %}
@@ -37,10 +37,10 @@
     <div class="row">
       <div class="right input-field col s6">
         <button id="newCategoryForm" onclick="validate_new_category();" type="button" class="waves-effect waves-light btn">
-        <i class="material-icons right">add</i>Criar categoria</button>
+        <i class="material-icons right">add</i> {% trans "Criar categoria" %} </button>
       </div>
       <div class="left input-field col s6">
-        <a href="{% url 'home' %}" type="button" class="waves-effect waves-light btn"><i class="material-icons right">cancel</i>Cancelar</a>
+        <a href="{% url 'home' %}" type="button" class="waves-effect waves-light btn"><i class="material-icons right">cancel</i> {% trans "Cancelar" %} </a>
       </div>
     </div>
 </form>

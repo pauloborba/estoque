@@ -1,22 +1,23 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load qtyMap %}
 {% block title %}
-  <title> Home </title>
+  <title> {% trans "Home" %} </title>
 {% endblock title %}
 
 {% block body %}
-  <h1 class="center"> Bem-vindo </h1>
+  <h1 class="center"> {% trans "Bem-vindo" %} </h1>
 
   <div class="row">
 
     <div class="col s12 m6">
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
-          <span class="card-title">Como usar o sistema?</span>
-          <p>Navegue pelas instruções de como usar o sistema.</p>
+          <span class="card-title"> {% trans "Como usar o sistema?" %} </span>
+          <p> {% trans "Navegue pelas instruções de como usar o sistema." %} </p>
         </div>
         <div class="card-action">
-          <a id="anchorHelp" href="{% url 'help' %}">Ajuda<i style="padding-left: 3px; font-size: 20px; position: absolute; top: 16px;" class="material-icons">live_help</i></a>
+          <a id="anchorHelp" href="{% url 'help' %}"> {% trans "Ajuda" %} <i style="padding-left: 3px; font-size: 20px; position: absolute; top: 16px;" class="material-icons">live_help</i></a>
         </div>
       </div>
     </div>
@@ -24,11 +25,11 @@
     <div class="col s12 m6">
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
-          <span class="card-title">Criar uma loja.</span>
-          <p>Cadastre uma loja onde você costuma comprar.</p>
+          <span class="card-title"> {% trans "Criar uma loja." %} </span>
+          <p> {% trans "Cadastre uma loja onde você costuma comprar." %} </p>
         </div>
         <div class="card-action">
-          <a href="{% url 'new_store' %}">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+          <a href="{% url 'new_store' %}"> {% trans "Criar" %} <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
         </div>
       </div>
     </div>
@@ -36,11 +37,11 @@
     <div class="col s12 m6">
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
-          <span class="card-title">Criar um item.</span>
-          <p>Cadastre um item na relação de itens.</p>
+          <span class="card-title"> {% trans "Criar um item." %} </span>
+          <p> {% trans "Cadastre um item na relação de itens." %} </p>
         </div>
         <div class="card-action">
-          <a href="{% url 'new_item' %}">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+          <a href="{% url 'new_item' %}"> {% trans "Criar" %} <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
         </div>
       </div>
     </div>
@@ -48,11 +49,11 @@
     <div class="col s12 m6">
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
-          <span class="card-title">Criar uma categoria.</span>
-          <p>Cadastre uma categoria em uma loja já criada.</p>
+          <span class="card-title"> {% trans "Criar uma categoria." %} </span>
+          <p> {% trans "Cadastre uma categoria em uma loja já criada." %} </p>
         </div>
         <div class="card-action">
-          <a href="{% url 'new_category' %}">Criar <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+          <a href="{% url 'new_category' %}"> {% trans "Criar" %} <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
         </div>
       </div>
     </div>
@@ -60,11 +61,11 @@
     <div class="col s12 m6">
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
-          <span class="card-title">Criar um preço.</span>
-          <p>Associe um preço a um produto em uma loja.</p>
+          <span class="card-title"> {% trans "Criar um preço." %} </span>
+          <p>{% trans "Associe um preço a um produto em uma loja." %} </p>
         </div>
         <div class="card-action">
-          <a href="{% url 'new_price' %}">Criar<i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
+          <a href="{% url 'new_price' %}"> {% trans "Criar" %} <i style="position: absolute; top: 13px;" class="material-icons">add</i></a>
         </div>
       </div>
     </div>
@@ -72,11 +73,11 @@
     <div class="col s12 m6">
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
-          <span class="card-title">Baixar lista de loja.</span>
-          <p>Selecione uma loja e baixe em PDF a lista dessa loja.</p>
+          <span class="card-title"> {% trans "Baixar lista de loja." %} </span>
+          <p> {% trans "Selecione uma loja e baixe em PDF a lista dessa loja." %} </p>
         </div>
         <div class="card-action">
-          <a href="{% url 'listByStore' %}">Baixar<i style="position: absolute; top: 13px;" class="material-icons">play_for_work</i></a>
+          <a href="{% url 'listByStore' %}"> {% trans "Baixar" %} <i style="position: absolute; top: 13px;" class="material-icons">play_for_work</i></a>
         </div>
       </div>
     </div>
@@ -84,11 +85,11 @@
     <div class="col s12 m6">
       <div class="card blue-grey darken-1">
         <div class="card-content white-text">
-          <span class="card-title">Baixar lista de várias lojas.</span>
-          <p>Escolha as lojas que você deseja incluir na lista.</p>
+          <span class="card-title"> {% trans "Baixar lista de várias lojas." %} </span>
+          <p> {% trans "Escolha as lojas que você deseja incluir na lista." %} </p>
         </div>
         <div class="card-action">
-          <a href="{% url 'generate_list' %}">Baixar<i style="position: absolute; top: 13px;" class="material-icons">play_for_work</i></a>
+          <a href="{% url 'generate_list' %}"> {% trans "Baixar" %} <i style="position: absolute; top: 13px;" class="material-icons">play_for_work</i></a>
         </div>
       </div>
     </div>

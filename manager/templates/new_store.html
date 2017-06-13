@@ -1,25 +1,26 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block title %}
-  <title> Nova Loja </title>
+  <title>  {% trans "Nova Loja" %} </title>
 {% endblock title %}
 
 {% block body %}
-<h1 class="center"> Nova Loja </h1>
+<h1 class="center">  {% trans "Nova Loja" %} </h1>
 <form id="newStoreForm" class="col s12" action="" method="post">
   {% csrf_token %}
     <div class="row">
       <div class="input-field col s12">
         <i class="material-icons prefix">description</i>
-        <input oninput="setCustomValidity('')" required oninvalid="this.setCustomValidity('Campo obrigatório')" id="storeNameInput" name="name" type="text" class="validate">
-        <label for="name">Nome da loja</label>
+        <input oninput="setCustomValidity('')" required oninvalid="this.setCustomValidity('{% trans "Campo obrigatório" %}')" id="storeNameInput" name="name" type="text" class="validate">
+        <label for="name"> {% trans "Nome da loja" %} </label>
       </div>
     </div>
 
     {% if name_taken %}
       <div class="row">
         <div class="col s4">
-          <p class="center red-text">Nome já em uso.</p>
+          <p class="center red-text"> {% trans "Nome já em uso." %} </p>
         </div>
       </div>
     {% endif %}
@@ -27,10 +28,10 @@
     <div class="row">
       <div class="right input-field col s6">
         <button id="newStoreButton" type="submit" class="waves-effect waves-light btn">
-        <i class="material-icons right">add</i>Criar loja</button>
+        <i class="material-icons right">add</i> {% trans "Criar loja" %} </button>
       </div>
       <div class="left input-field col s6">
-        <a href="{% url 'home' %}" type="button" class="waves-effect waves-light btn"><i class="material-icons right">cancel</i>Cancelar</a>
+        <a href="{% url 'home' %}" type="button" class="waves-effect waves-light btn"><i class="material-icons right">cancel</i> {% trans "Cancelar" %} </a>
       </div>
     </div>
 </form>

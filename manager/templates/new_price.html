@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block title %}
   <title> Novo Preço </title>
 {% endblock title %}
@@ -11,14 +11,14 @@
 
 {% block body %}
 {% include 'menu.html' %}
-<h1 class="center"> Novo Preço </h1>
+<h1 class="center"> {% trans "Novo Preço" %} </h1>
 <form id="newPriceForm" action="" method="post">
   {% csrf_token %}
     <div class="row">
       <div class="input-field col s12 m6">
         <i class="material-icons prefix">description</i>
         <input id="priceInput" name="price" type="number" class="validate" min = "0" required>
-        <label for="name">Preço do produto</label>
+        <label for="name"> {% trans "Preço do produto" %} </label>
       </div>
     </div>
     <div class="row">
@@ -29,7 +29,7 @@
               <option value="{{item.id}}">{{item.item_name}}</option>
             {% endfor %}
           </select>
-          <label>Produto</label>
+          <label> {% trans "Produto" %} </label>
         </div>
 
         <div class="input-field col s12 m6">
@@ -39,23 +39,23 @@
               <option value="{{category.id}}">{{ category.category_store.store_name }} - {{category.category_name}}</option>
             {% endfor %}
           </select>
-          <label>Loja</label>
+          <label> {% trans "Loja" %} </label>
         </div>
     </div>
     {% if name_taken %}
       <div class="row">
         <div class="col s4">
-          <p class="left red-text"> Preço já cadastrado! </p>
+          <p class="left red-text"> {% trans "Preço já cadastrado!"%} </p>
         </div>
       </div>
     {% endif %}
     <div class="row">
       <div class="right input-field col s6">
         <button id="newPriceForm" onclick="validate_new_price();" type="button" class="waves-effect waves-light btn">
-        <i class="material-icons right">add</i>Cadastrar preço</button>
+        <i class="material-icons right">add</i> {% trans "Cadastrar preço" %} </button>
       </div>
       <div class="right input-field col s6">
-        <a href="{% url 'price_list' %}" type="button" class="waves-effect waves-light btn"><i class="material-icons right">cancel</i>Cancelar</a>
+        <a href="{% url 'price_list' %}" type="button" class="waves-effect waves-light btn"><i class="material-icons right">cancel</i> {% trans "Cancelar" %} </a>
       </div>
     </div>
   </form>

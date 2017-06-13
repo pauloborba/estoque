@@ -1,8 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
 {% load static %}
 {% load staticfiles %}
 {% load compress %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/gif" href="{% static 'favicon.ico'%}" />
@@ -15,7 +16,7 @@
   <script src="{% static 'materialize/dist/js/materialize.min.js' %}"></script>
   <script src="{% static 'js/default.js' %}"></script>
   {% endcompress %}
-  <title> Stock Manager </title>
+  <title> {% trans "Stock Manager" %} </title>
 
 </head>
 
@@ -24,8 +25,8 @@
   <main>
     <center>
       <div class="section"></div>
-      <h1>Stock Manager</h1>
-      <h5 class="indigo-text">Por favor, se autentique</h5>
+      <h1>{% trans "Stock Manager" %}</h1>
+      <h5 class="indigo-text"> {% trans "Por favor, se autentique" %} </h5>
       <div class="section"></div>
 
       <div class="container">
@@ -41,24 +42,24 @@
             <div class='row'>
               <div class='input-field col s12'>
                 <input oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Campo obrigatório')" required class='validate' type="text" name='username' id="username" />
-                <label for='username' style="text-align: left;">Seu nome</label>
+                <label for='username' style="text-align: left;"> {% trans "Seu nome" %} </label>
               </div>
             </div>
 
             <div class='row'>
               <div class='input-field col s12'>
                 <input oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Campo obrigatório')" required class='validate' type='password' name='password' id="password"/>
-                <label for='password' style="text-align:left;">Sua senha</label>
+                <label for='password' style="text-align:left;"> {% trans "Sua senha" %} </label>
               </div>
             </div>
             {% if error %}
-              <p class="red-text subheader"> Nome e/ou senha incorreto(s).</p>
+              <p class="red-text subheader"> {% trans "Nome ou senha incorreto(s)" %} </p>
             {% endif %}
 
             <br />
             <center>
               <div class='row'>
-                <button id="loginButton" type="submit" class='col s12 btn btn-large waves-effect indigo'><i class="material-icons right">send</i>Entrar</button>
+                <button id="loginButton" type="submit" class='col s12 btn btn-large waves-effect indigo'><i class="material-icons right">send</i> {% trans "Entrar" %} </button>
               </div>
             </center>
           </form>

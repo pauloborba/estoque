@@ -1,7 +1,8 @@
-<!DOCTYPE html>
 {% load static %}
 {% load staticfiles %}
 {% load compress %}
+{% load i18n %}
+<!DOCTYPE html>
 <html lang="pt-br">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,17 +27,17 @@
     {% include 'menu.html' %}
     <ul id="slide-out" class="hide-on-med-and-down indigo side-nav fixed">
       <li><div class="userView">
-        <p class="whiteText">Você está logado como: <b>{{request.user.username}}</b></p>
+        <p class="whiteText"> {% trans "Você está logado como:" %} <b>{{request.user.username}}</b></p>
         <p class="whiteText">Email: {{request.user.email}}</p>
       </div></li>
       <li><div class="divider"></div></li>
-      <li class="center"><i class="material-icons">stars</i><h5 class="whiteText" style="display: inline;"><b>Ranking</b></h5>
+      <li class="center"><i class="material-icons">stars</i><h5 class="whiteText" style="display: inline;"><b> {% trans "Ranking" %} </b></h5>
       <i class="material-icons">stars</i></li>
       <table class="whiteText highlight bordered">
         <thead>
           <tr class="black-text">
-              <th>Nome</th>
-              <th>Pontuação</th>
+              <th> {% trans "Nome" %} </th>
+              <th> {% trans "Pontuação" %} </th>
           </tr>
         </thead>
         <tbody>
@@ -49,10 +50,10 @@
 
             {% if user.username == request.user.username %}
               {% if forloop.counter == 1 %}
-                <td><span style="color: green"><b>Você</b></span><i style="margin-left: 5px; color: yellow; !important;" class="material-icons tiny">grade
+                <td><span style="color: green"><b> {% trans "Você" %} </b></span><i style="margin-left: 5px; color: yellow; !important;" class="material-icons tiny">grade
                 </i></td>
               {% else %}
-                <td><span style="color: green"><b>Você</b></span></td>
+                <td><span style="color: green"><b> {% trans "Você" %} </b></span></td>
               {% endif %}
 
               <td><span class="black-text" id="userPoints">{{user.points}}</span></td>

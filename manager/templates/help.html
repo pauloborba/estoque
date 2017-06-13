@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block title %}
-	<title> Lista de produtos </title>
+	<title> {% trans "Lista de produtos" %} </title>
 {% endblock %}
 
 {% block body %}
-	<h1> Como usar o sistema </h1>
+	<h1> {% trans "Como usar o sistema" %} </h1>
 	<ul class="flow-text left-align">
-		<li>Crie uma loja,</li>
-		<li>Para cada loja, crie categorias,</li>
-		<li>Crie produtos,</li>
-		<li>Associe um produto a um preço em uma loja,</li>
-		<li>Imprima em PDF informações da loja(s) desejada(s).</li>
+		<li>{% trans "Crie uma loja," %} </li>
+		<li>{% trans "Para cada loja, crie categorias," %} </li>
+		<li>{% trans "Crie produtos," %} </li>
+		<li>{% trans "Associe um produto a um preço em uma loja," %} </li>
+		<li>{% trans "Imprima em PDF informações da loja(s) desejada(s)." %} </li>
 	</ul>
 {% endblock %}

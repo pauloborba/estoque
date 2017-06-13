@@ -133,6 +133,8 @@ def write_pdf(pdf_ref, stores):
     pdf_ref.drawString(50, 804, "Stock Manager")
     i = 2
     stores = Store.objects.filter(id__in=stores)
+    total_sum = 0
+    has_product_low_qty = False
     for store in stores:
         pdf_ref.setFont("Helvetica", 25)
         pdf_ref.drawString(35, (800-(30*i)), store.store_name)
@@ -147,17 +149,22 @@ def write_pdf(pdf_ref, stores):
             i += 1
             for prod in products:
                 if prod.price_product.qty < prod.price_product.min_qty:
+                    has_product_low_qty = True
                     pdf_ref.setFont("Helvetica", 15)
                     name = prod.price_product.item_name
                     pdf_ref.drawString(200, (800-(30*i)), name + ' - R$ ' + str(prod.cost_product))
                     total_price += prod.cost_product
+                    total_sum += prod.cost_product
                     i += 1
             i += 1
         pdf_ref.setFont("Helvetica", 25)
         pdf_ref.drawString(35, (800-(30*i)), 'Total ' + store.store_name + ' - R$ ' + str(total_price))
         i += 2
+    pdf_ref.setFont("Helvetica", 30)
+    pdf_ref.drawString(35, (800-(30*i)), 'Total - R$ ' + str(total_sum))
     pdf_ref.showPage()
     pdf_ref.save()
+    return has_product_low_qty
 
 
 @require_http_methods(["GET", "POST"])
@@ -169,8 +176,10 @@ def generate_list(request):
     response['Content-Disposition'] = "attachment; filename=lista.pdf"
     p = canvas.Canvas(response)
     stores = request.POST.getlist('store_checkbox')
-    write_pdf(p, stores)
-    return response
+    if write_pdf(p, stores):
+        return response
+    else:
+        return HttpResponseRedirect(reverse('home'))
 
     
 

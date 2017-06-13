@@ -11,9 +11,6 @@ page_mapping = {'gerar lista de lojas': 'generate_list',\
 				'principal': 'home'}
 
 
-def getPort(url): #Retorna a porta da URL
-    return url.split(':')[2].split('/')[0]
-
 def create_item(item_name, qtd, min_qtd):
     Item.objects.create(item_name=item_name, qty=qtd, min_qty=min_qtd)
 
@@ -33,10 +30,12 @@ def create_price(store, category, item, cost):
 
 
 
+@given(u'Nao ha lojas cadastradas no sistema')
+def step_impl(context):
+	assert not len(Store.objects.all())
 
 @given(u'Os produtos {prod1}, {prod2} estao cadastrados no sistema com quantidade {qtd} e quantidade minima {min_qtd}')
 def step_impl(context, prod1, prod2, qtd, min_qtd):
-    context.port = getPort(context.base_url)
     create_item(prod1, qtd, min_qtd)
     create_item(prod2, qtd, min_qtd)
     assert len(Item.objects.all()) >= 2
@@ -65,8 +64,8 @@ def step_impl(context, qtd):
 @when('Eu navego para a pagina {page}')
 def step_impl(context, page):
 	page_url = page_mapping[page]
-	context.browser.visit('http://localhost:'+context.port+reverse(page_url))
-	assert context.browser.url == ('http://localhost:'+context.port+reverse(page_url))
+	context.browser.visit(context.base_url+reverse(page_url))
+	assert context.browser.url == (context.base_url + reverse(page_url))
 
 @when('Eu desmarco a loja {store}')
 def step_impl(context, store):
@@ -75,7 +74,7 @@ def step_impl(context, store):
 @when(u'Eu seleciono a opcao gerar lista')
 def step_impl(context):
 	context.browser.find_by_id('generateList').click()
-	sleep(5) # Esperar o download terminar para continuar
+	sleep(10) # Esperar o download terminar para continuar
 	# O certo seria fazer um callback mas não sei fazer isso em python ainda e não há tempo
 
 @then(u'Eu recebo um arquivo e vejo escrito {store1} e vejo {item1} e vejo {item2} e nao vejo {store2}')
@@ -104,6 +103,17 @@ def step_impl(context, item, qtd):
 	item = Item.objects.get(item_name=item)
 	assert int(item.qty) == int(qtd)
 
+@then(u'Eu recebo um arquivo e vejo escrito Total {total_cost}')
+def step_impl(context, total_cost):
+	dir_path = os.path.dirname(os.path.realpath(__file__))
+	pdf = PdfFileReader(os.getcwd()+'/lista.pdf')
+	pdf_content = pdf.getPage(0).extractText()
+	total_string = 'Total - R$ ' + total_cost
+	assert total_string in pdf_content
+	if os.path.isfile(os.getcwd()+'/lista.pdf'): #Remove o arquivo para os proximos passos
+		os.remove(os.getcwd()+'/lista.pdf')
+
+
 @then(u'O preco do item {item} na loja {store} se mantem {cost}')
 def step_impl(context, item, store, cost):
 	item = Item.objects.get(item_name=item)
@@ -115,3 +125,9 @@ def step_impl(context, item, store, cost):
 			new_cost = price.cost_product
 			break
 	assert float(new_cost) == float(cost)
+
+@then(u'Eu nao recebo o arquivo com a lista')
+def step_impl(context):
+	files = os.listdir(os.getcwd())
+	for file in files:
+		assert file != 'lista.pdf'

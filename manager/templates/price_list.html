@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block title %}
-  <title> Preços Cadastrados </title>
+  <title>  {% trans "Preços Cadastrados" %} </title>
 {% endblock title %}
 
 {% block body %}
 {% include 'menu.html' %}
 <h3>
-	Relação Produto-Loja-Preço
+	 {% trans "Relação Produto-Loja-Preço" %}
 </h3>
 	<div class="row">
 		<div class="collection col s12" style="padding-left: 0px; padding-right: 0px;">

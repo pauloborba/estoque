@@ -1,4 +1,4 @@
-Feature: Generate List of selected stores
+Feature: Gerar lista das lojas selecionadas
 
   Scenario: Retirar um supermercado da lista e gerar lista
 
@@ -25,6 +25,53 @@ Feature: Generate List of selected stores
 	When Eu navego para a pagina gerar lista de lojas
 	And Eu seleciono a opcao gerar lista
 	Then Eu recebo um arquivo e vejo escrito Total Wallmart 43.75
+
+  Scenario: Totalizar o preço da lista
+
+  	Given Os produtos Carne, Macarrao estao cadastrados no sistema com quantidade 3 e quantidade minima 5
+  	And Os produtos Suco, Coca estao cadastrados no sistema com quantidade 2 e quantidade minima 4
+	And A loja Wallmart esta cadastrada
+	And A loja Extra esta cadastrada
+	And A loja Wallmart possui a sessao Comidas
+	And A loja Wallmart possui a sessao Bebidas
+	And A loja Extra possui a sessao Bebidas
+	And A loja Wallmart possui Carne na sessao Comidas com o preco 25.50 e Macarrao na sessao Comidas com o preco 8.00
+	And A loja Wallmart possui Suco na sessao Bebidas com o preco 4.25 e Coca na sessao Bebidas com o preco 6.00
+	And A loja Extra possui Suco na sessao Bebidas com o preco 5.00 e Coca na sessao Bebidas com o preco 5.00
+	When Eu navego para a pagina gerar lista de lojas
+	And Eu seleciono a opcao gerar lista
+	Then Eu recebo um arquivo e vejo escrito Total 53.75
+
+  Scenario: Tentar Gerar Lista sem nenhuma loja selecionada
+
+    Given Os produtos Feijao, Lasanha estao cadastrados no sistema com quantidade 3 e quantidade minima 5
+	And A loja Carrefour esta cadastrada
+	And A loja Extra esta cadastrada
+	And A loja Carrefour possui a sessao Geral
+	And A loja Carrefour possui Feijao na sessao Geral com o preco 2.50 e Lasanha na sessao Geral com o preco 6.00
+	When Eu navego para a pagina gerar lista de lojas
+	And Eu desmarco a loja Extra
+	And Eu desmarco a loja Carrefour
+	And Eu seleciono a opcao gerar lista
+	Then Eu nao recebo o arquivo com a lista
+
+  Scenario: Tentar Gerar Lista com todos os itens com quantidade acima da quantidade minima
+
+    Given Os produtos Feijao, Lasanha estao cadastrados no sistema com quantidade 6 e quantidade minima 5
+	And A loja Carrefour esta cadastrada
+	And A loja Extra esta cadastrada
+	And A loja Carrefour possui a sessao Geral
+	And A loja Carrefour possui Feijao na sessao Geral com o preco 2.50 e Lasanha na sessao Geral com o preco 6.00
+	When Eu navego para a pagina gerar lista de lojas
+	And Eu seleciono a opcao gerar lista
+	Then Eu nao recebo o arquivo com a lista
+
+  Scenario: Tentar Gerar Lista sem lojas cadastradas
+
+    Given Nao ha lojas cadastradas no sistema
+	When Eu navego para a pagina gerar lista de lojas
+	And Eu seleciono a opcao gerar lista
+	Then Eu nao recebo o arquivo com a lista
 
   Scenario: Gerar Lista não altera a quantidade atual dos itens cadastrados
 

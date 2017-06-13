@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load qtyMap %}
 {% block title %}
-    <title> Nova lista </title>
+    <title> {% trans "Nova lista" %} </title>
 {% endblock title %}
 
 {% block body %}
     {% include 'menu.html' %}
     <header class="row">
         <div class="col s12 center">
-            <h3><strong> Criação de lista para loja específica </strong></h3>
+            <h3><strong> {% trans "Criação de lista para loja específica" %} </strong></h3>
         </div>
     </header>
     <article>
         <div class="col s12">
             <div class="row">
-            <h4> Selecione uma loja: </h4>
+            <h4> {% trans "Selecione uma loja:" %} </h4>
                 <div class="collection col s12" style="padding-left: 0px; padding-right: 0px;">
                     {% if stores is not None %}
                     <form action="" method="post">
@@ -33,16 +34,16 @@
                             <p>
                                 <button class="btn waves-effect waves-light" type="button" name="action">
                                     <i class="material-icons right">visibility</i>
-                                    Visualizar
+                                    {% trans "Visualizar" %}
                                 </button>
                                 <button class="btn green accent-3 black-text" type="submit" name="action">
                                     <i class="rotate180 material-icons right">publish</i>
-                                    Baixar
+                                    {% trans "Baixar" %}
                                 </button>
                             </p>
                         </form>
                     {% else %}
-                        <h5>Nenhuma Loja cadastrada.</h5>
+                        <h5> {% trans "Nenhuma Loja cadastrada." %} </h5>
                     {% endif %}
                 </div>
             </div>
