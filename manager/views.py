@@ -200,7 +200,9 @@ def generate_list(request):
 
 @require_http_methods(["GET", "POST"])
 def create_store_file(request):
-    stores = Store.objects.all()
+    stores = None
+    if Store.objects.all().exists():
+        stores = Store.objects.all()
     # GET - Abre pagina new_list_store
     if request.method == 'GET':
         return render(request, 'new_list_store.html', {'stores': stores, 'list_creatable': True})
@@ -257,7 +259,7 @@ def generate_pdf_by_store(store, file_name):
             if price.price_product.qty < price.price_product.min_qty:
                 p.setFont("Helvetica", 16)
                 p.drawString(150, (630 - (30 * i)), price.price_product.item_name)
-                len_item = len(str(price.price_product.item_name))
+                len_item = len(unicode(price.price_product.item_name))
                 # calcuta o preco total
                 result += price.cost_product
                 p.drawString(150 + (8*len_item), (630 - (30 * i)), " - R$ "+str(price.cost_product))

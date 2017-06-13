@@ -32,8 +32,8 @@ def registra_duas_secoes(context, secao1, secao2, loja):
 
 @given('os produtos "{item1}" e "{item2}" estão cadastrados no estoque')
 def registra_dois_itens(context, item1, item2):
-    registra_item_and_check(context, item1)
-    registra_item_and_check(context, item2)
+    registra_item_and_check(context, item1, 5, 5)
+    registra_item_and_check(context, item2, 5, 5)
 
 
 @given('os produtos "{item1}" e "{item2}" estão em falta no estoque')
@@ -58,7 +58,7 @@ def cria_preco(context, cat, store, item, price):
 def solicita_criacao_de_lista_para_loja(context, store):
     go_pag_new_list_by_store(context)
     seleciona_store(context, store)
-    baixa_store(context)
+    baixa_store(context,"baixar")
     sleep(3)
 
 
@@ -126,10 +126,7 @@ def step_cria_dois_precos(context, cat, store, item1, price1, item2, price2):
 
 @given('vejo na página "generate_list" que os seguintes produtos "{item1}", "{item2}" e "{item3}" estão em falta no estoque')
 def step_impl(context, item1, item2, item3):
-    open_home(context)
-    # Seleciona no menu e vai para /generate_list/
-    context.browser.find_by_id('linkGenerateList').click()
-    sleep(2)
+    go_generate_list(context)
     assert str(context.browser.url).endswith('/generate_list/')
     linesItems = context.browser.find_by_css('.red-text')
     assert linesItems is not None
@@ -178,7 +175,7 @@ def go_pag_generate_list(context):
     assert context.browser.is_element_not_present_by_css('.red-text')
 
 
-@given('estou na página "newListByStore"')
+@when('navego para a página "newListByStore"')
 def go_pag_new_list_by_store(context):
     open_home(context)
     # Seleciona no menu e vai para /newListByStore/
@@ -195,10 +192,14 @@ def seleciona_store(context, store):
     sleep(1)
 
 
-@when('seleciono a opção "baixar"')
-def baixa_store(context):
-    btn = context.browser.find_by_name('btn-submit').first  # context.browser.find_by_name('action').first
-    btn.click()
+@when('seleciono a opção "{opcao}"')
+def baixa_store(context, opcao):
+    if opcao == "cancelar":
+        btn = context.browser.find_by_name('btn-cancel').first  # context.browser.find_by_name('action').first
+        btn.click()
+    elif opcao == "baixar":
+        btn = context.browser.find_by_name('btn-submit').first  # context.browser.find_by_name('action').first
+        btn.click()
     sleep(3)
 
 
@@ -206,6 +207,69 @@ def baixa_store(context):
 def step_impl(context, message):
     assert context.browser.is_text_present(message)
     clean_files()
+
+
+@given("não existe lojas registradas no sistema")
+def nao_ha_lojas(context):
+    delete_all_stores()
+
+
+@then("não vejo opções para solicitar a criação de lista")
+def step_impl(context):
+    assert context.browser.is_text_not_present("Baixar")
+
+
+@given('vejo na página "generate_list" que os produtos "{item1}" e "{item2}" estão em falta no estoque')
+def step_impl(context, item1, item2):
+    go_generate_list(context)
+    assert str(context.browser.url).endswith('/generate_list/')
+    linesItems = context.browser.find_by_css('.red-text')
+    assert linesItems is not None
+    items = []
+    for i in linesItems:
+        items.append(i.text.split(' ', 2)[0] + " " + i.text.split(' ', 2)[1])
+    assert item1 in items
+    assert item2 in items
+    sleep(2)
+
+
+@then('a página é encaminhada para "home"')
+def step_impl(context):
+    assert str(context.browser.url).endswith("/home/")
+
+
+@then('no arquivo aparece "{store}" como nome da loja')
+def verifica_store_name_no_arquivo(context, store):
+    assert store in context.pdf_content
+
+
+@given('a seção "{category}" foi cadastrada em "{store}"')
+def registra_categoria_em_loja(context, category, store):
+    registra_secao_and_check(context, category, store)
+
+
+@given('o produto "{item}" foi cadastrado no estoque com quantidade "{qtd}" e quantidade mínima "{min_qtd}"')
+def registra_item(context, item, qtd, min_qtd):
+    registra_item_and_check(context, item, float(qtd), float(min_qtd))
+
+
+@then('a quantidade do item "{item}" permanace "{qtd}"')
+def step_impl(context, item, qtd):
+    item_instace = get_item_by_name(item)
+    assert item_instace is not None
+    assert item_instace.qty == int(qtd)
+
+
+@then('a quantidade mínima do produto "{item}" permanece "{qtd_min}"')
+def step_impl(context, item, qtd_min):
+    item_instace = get_item_by_name(item)
+    assert item_instace is not None
+    assert item_instace.min_qty == int(qtd_min)
+
+
+@then('na seção "{cat}" em "{store}" o preço do produto "{item}" permanece "{price}"')
+def step_impl(context, cat, store, item, price):
+    assert get_price(price,cat,store,item).cost_product == float(price)
 
 
 # Funções auxiliares
@@ -313,9 +377,9 @@ def registra_secao_and_check(context, secao, loja):
     assert category_created.category_name == secao
 
 
-def registra_item_and_check(context, item):
+def registra_item_and_check(context, item, quant, quant_min):
     item = unicode(item)
-    create_item(item, 5, 5)
+    create_item(item, quant, quant_min)
     item_created_1 = get_item_by_name(item)
     assert item_created_1 is not None
     assert item_created_1.item_name == item
@@ -331,6 +395,7 @@ def registra_preco_and_check(context, cat, store, item, price):
 def delete_all_stores():
     Store.objects.all().delete()
 
+
 def delete_all_items():
     Item.objects.all().delete()
 
@@ -344,9 +409,9 @@ def clean_files():
     if os.path.isfile(os.getcwd() + '/ListaLoja.pdf'):  # Remove o arquivo para os proximos passos
         os.remove(os.getcwd() + '/ListaLoja.pdf')
 
-'''
-Descartados:
-    
 
-    
-'''
+def go_generate_list(context):
+    open_home(context)
+    # Seleciona no menu e vai para /generate_list/
+    context.browser.find_by_id('linkGenerateList').click()
+    sleep(2)
