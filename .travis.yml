@@ -13,9 +13,10 @@ install:
   - python manage.py migrate
 
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
   - sleep 3
+  - sudo add-apt-repository ppa:ubuntu-mozilla-security/ppa -y
   - sudo apt-get update
   - sudo apt-get install firefox=54.0+build3-0ubuntu0.16.04.1
   - firefox -v
