@@ -17,7 +17,7 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3
   - sudo apt-get update
-  - sudo apt-get install firefox
+  - sudo apt-get install firefox=54.0+build3-0ubuntu0.16.04.1
   - firefox -v
 
 script: python manage.py behave
