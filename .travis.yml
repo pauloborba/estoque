@@ -18,7 +18,7 @@ before_script:
   - sleep 3
   - sudo add-apt-repository ppa:ubuntu-mozilla-security/ppa -y
   - sudo apt-get update
-  - sudo apt-get install firefox=54.0+build3-0ubuntu0.16.04.1
+  - sudo apt-get install firefox=54.* -y
   - firefox -v
 
 script: python manage.py behave
