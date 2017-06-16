@@ -2,12 +2,12 @@ dist: trusty
 sudo: required
 
 addons:
-  firefox: 54
+  firefox: "54"
 
 language: python
 python:
   - "2.7"
-# command to install dependencies
+
 install:
   - export PATH=$PATH:./features/driver/linux
   - npm install -g bower
@@ -15,5 +15,9 @@ install:
   - pip install -r requirements.txt
   - python manage.py migrate
 
-# command to run tests
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3
+
 script: python manage.py behave
