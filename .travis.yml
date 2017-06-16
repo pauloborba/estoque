@@ -9,7 +9,7 @@ python:
   - "2.7"
 # command to install dependencies
 install:
-  - export PATH=$PATH:.
+  - export PATH=$PATH:./features/driver/linux
   - npm install -g bower
   - bower install
   - pip install -r requirements.txt
