@@ -22,7 +22,8 @@
     {% block title %}
     {% endblock %}
   </head>
-  <body>
+  <body style="background-color: #f5f5f5;">
+    {% include 'menu.html' %}
     <ul id="slide-out" class="hide-on-med-and-down indigo side-nav fixed">
       <li><div class="userView">
         <p class="whiteText">Você está logado como: <b>{{request.user.username}}</b></p>
@@ -69,12 +70,12 @@
         </tbody>
       </table>
     </ul>
-    <div class="bodyContent container">
+    <div class="bodyContent container" style="margin-bottom: 15px;">
+      {% if not is_home %}
+        <a href="/home/" style="color: inherit;"><i style="position: absolute; top: 13px;" class="medium rotate180 material-icons">input</i></a>
+      {% endif %}
       {% block body %}
       {% endblock %}
     </div>
-    <footer class="bodyContent center">
-      <strong>&copy;LCGM</strong>
-    </footer>
   </body>
 </html>

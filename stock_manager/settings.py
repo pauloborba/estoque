@@ -24,10 +24,12 @@ SECRET_KEY = '29418=8h&nnz$pjb5@k@dnng0r6xfls5i%=b@l1k+p93#=ykvp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'custom_user.customUser'
+
+#Internationalization
+USE_I18N = True
 
 # Application definition
 
@@ -86,6 +88,8 @@ DATABASES = {
     }
 }
 
+# Access features without login
+ALLOW_ANONYMOUS = True
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
