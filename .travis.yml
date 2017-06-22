@@ -1,13 +1,26 @@
+dist: trusty
+sudo: required
+
 language: python
 python:
   - "2.7"
-# command to install dependencies
+
 install:
-  - pip install -r requirements.txt
+  - export PATH=$PATH:./features/driver/linux
   - npm install -g bower
   - bower install
+  - pip install -r requirements.txt
   - yes | python manage.py makemigrations --merge
   - python manage.py migrate
 
-# command to run tests
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
+  - whereis firefox | tr ' ' '\n' | grep bin | xargs sudo rm
+  - sudo add-apt-repository ppa:ubuntu-mozilla-security/ppa -y
+  - sudo apt-get update
+  - sudo apt-get install firefox=54.* -y
+  - firefox -V
+
 script: python manage.py behave

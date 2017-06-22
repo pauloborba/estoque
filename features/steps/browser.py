@@ -10,8 +10,8 @@ def step_impl(context):
 def step_impl(context):
     br = context.browser
     br.visit(context.base_url)
-    br.fill('username', 'test')
-    br.fill('password', 'test')
+    br.fill("username", "test")
+    br.fill("password", "test")
     button = br.find_by_tag('button')
     button.click()
 

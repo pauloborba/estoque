@@ -35,6 +35,8 @@ def before_all(context):
     #context.browser = Browser('firefox')
     #context.browser = Browser('phantomjs', **executable_path)
 
+def before_all(context):
+    context.browser = Browser('firefox')
 
 def after_all(context):
     remove_pdfs()
